@@ -1,0 +1,15 @@
+[requires]
+imgui/1.86@
+sdl/2.0.18@
+opengl/system@
+glm/0.9.9.5@
+
+[generators]
+cmake
+
+[imports]
+./res/bindings, imgui_impl_sdl.cpp -> ../ImGuiBindings
+./res/bindings, imgui_impl_opengl3.cpp -> ../ImGuiBindings
+./res/bindings, imgui_impl_sdl.h -> ../ImGuiBindings
+./res/bindings, imgui_impl_opengl3.h -> ../ImGuiBindings
+./res/bindings, imgui_impl_opengl3_loader.h -> ../ImGuiBindings
