@@ -9,7 +9,7 @@
 wof_allocator_t* allocator;
 
 void JIT::run() {
-	auto jit = llvm::orc::LLJITBuilder().create();
+	auto jit = llvm::orc::LLJITBuilder().setNumCompileThreads(4).create();
 	if (!jit) {
 		std::cout << "Can't create JIT\n";
 		exit(ERROR_CANT_CREATE_JIT);
@@ -31,8 +31,7 @@ void JIT::run() {
 
 	// Try and find the Implicit function, if fails then compilation likely failed
 	auto proc_start = JIT->lookup("Implicit");
-	auto entry = llvm::jitTargetAddressToFunction<void (*)
-														  ()>(proc_start.get().getAddress());
+	auto entry = llvm::jitTargetAddressToFunction<void (*)()>(proc_start.get().getAddress());
 	allocator = wof_allocator_new();
 	entry();
 	wof_allocator_destroy(allocator);

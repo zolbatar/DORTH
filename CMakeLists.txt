@@ -140,7 +140,7 @@ Set(LLVM_LIBS_MAC
         libLLVMAArch64Utils.a)
 
 add_executable(${PROJECT_NAME}
-        main.cpp
+        main.cpp Console/Console.cpp UI/UISDL.cpp
         ImGuiBindings/imgui_impl_sdl.cpp ImGuiBindings/imgui_impl_opengl3.cpp JIT/JIT.h JIT/JIT.cpp
         JIT/JIT.cpp JIT/WOFAlloc.cpp)
 
