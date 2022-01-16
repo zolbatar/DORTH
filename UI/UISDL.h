@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
 #endif
+#include "../Console/Console.h"
 
 class UISDL {
 public:
@@ -18,6 +19,7 @@ public:
 
 private:
 	void _CreateWindow();
+	Console console;
 
 	float dpi_ratio;
 	int desktop_screen_width, desktop_screen_height;

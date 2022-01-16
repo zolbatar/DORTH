@@ -22,8 +22,8 @@
 
 class Console {
 public:
-	void Setup(int w, int h, float dpiRatio, int sx, int sy, bool command_line, bool banked);
-	void Update(ImFont* font, bool useBitmap);
+	void Setup(int w, int h, float dpiRatio, int sx, int sy, bool banked);
+	void Update(ImFont* font);
 	void Cls();
 	void WriteCharacter(char c);
 	void WriteString(std::string s);
@@ -42,7 +42,6 @@ private:
 	bool cursorActive = true;
 	ImU32 colour;
 	ImU32 bgColour;
-	bool command_line;
 	int charsAcross, charsDown;
 	float w, h;
 	float size;

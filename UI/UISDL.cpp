@@ -36,6 +36,9 @@ UISDL::UISDL() {
 	std::cout << white << "Desktop resolution: " << bright_yellow << desktop_screen_width << white << "x"
 			  << bright_yellow
 			  << desktop_screen_height << std::endl;
+
+	console.Setup(desktop_screen_width, desktop_screen_height, dpi_ratio,
+			desktop_screen_width/16, desktop_screen_height/32, false);
 }
 
 UISDL::~UISDL() {
@@ -94,7 +97,8 @@ void UISDL::Start() {
 	(void)io;
 	io.Fonts->Clear();
 	const float font_size = 10.0f;
-	io.Fonts->AddFontFromFileTTF("IBMPlexMono-Regular.ttf", font_size*dpi_ratio);
+	io.Fonts->AddFontFromFileTTF("IBMPlexSans-Regular.ttf", font_size*dpi_ratio);
+	auto fontMono = io.Fonts->AddFontFromFileTTF("IBMPlexMono-Regular.ttf", font_size*dpi_ratio);
 
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
@@ -107,7 +111,7 @@ void UISDL::Start() {
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	bool done = false;
-	bool demo_output = true;
+	bool window_output;
 	while (!done) {
 
 		// Process SDL events like keyboard & mouse
@@ -131,7 +135,7 @@ void UISDL::Start() {
 		ImGui::NewFrame();
 
 		// Main menu bar
-		if (ImGui::BeginMainMenuBar()) {
+/*		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
 				if (ImGui::MenuItem("New")) {
 					//Do something
@@ -142,7 +146,22 @@ void UISDL::Start() {
 				ImGui::EndMenu();
 			}
 			ImGui::EndMainMenuBar();
-		}
+		}*/
+
+		// Full screen stuff
+		const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		ImGui::SetNextWindowPos(main_viewport->Pos);
+		ImGui::SetNextWindowSize(main_viewport->Size);
+		ImGui::Begin("Fullscreen", &window_output,
+				ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize
+				| ImGuiWindowFlags_NoSavedSettings |
+				ImGuiWindowFlags_NoBackground);
+		console.Update(fontMono);
+		ImGui::End();
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
 
 		// Now render
 		ImGui::Render();

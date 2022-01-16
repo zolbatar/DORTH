@@ -9,9 +9,8 @@
 
 using namespace termcolor;
 
-void Console::Setup(int w, int h, float dpiRatio, int sx, int sy, bool command_line, bool banked) {
+void Console::Setup(int w, int h, float dpiRatio, int sx, int sy, bool banked) {
 	this->banked = banked;
-	this->command_line = command_line;
 	charsAcross = sx;
 	charsDown = sy;
 	this->w = static_cast<float>(w)/static_cast<float>(charsAcross);
@@ -41,7 +40,7 @@ void Console::SetColour(ImU32 colour) {
 	this->colour = colour;
 }
 
-void Console::Update(ImFont* font, bool useBitmap) {
+void Console::Update(ImFont* font) {
 	auto wl = ImGui::GetWindowDrawList();
 	auto desc = font->Descent/font->FontSize*size;
 	auto asc = font->Ascent/font->FontSize*size;
@@ -66,7 +65,7 @@ void Console::Update(ImFont* font, bool useBitmap) {
 
 void Console::Cls() {
 	for (size_t i = 0; i<charsAcross*charsDown; i++) {
-		screenText[i] = ' ';
+		screenText[i] = 'A';
 		screenColours[i] = 0x00000000;
 		bgColours[i] = 0x00000000;
 	}
