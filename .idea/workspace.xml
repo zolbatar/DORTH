@@ -22,25 +22,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0d653c8-2103-43bf-be30-0cc166b39cb5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/capstone" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/pitube/prompt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Console/Console.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Console/Console.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Console/TermColor.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Console/TerminalOutput.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ErrorCodes.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JIT/JIT.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JIT/JIT.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JIT/WOFAlloc.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/JIT/WOFAlloc.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/UISDL.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/UISDL.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/conanfile.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dorth" beforeDir="false" afterPath="$PROJECT_DIR$/Dorth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dorth.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bbckeycodes.h" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/bbckeycodes.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fb.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fb.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fb.h" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fb.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/bitmap_fonts.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/bitmap_fonts.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/font.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/font.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/font.h" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/font.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/stb_truetype.h" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/stb_truetype.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/ttf_fonts.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/ttf_fonts.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prompt/prompt.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prompt/prompt.h" beforeDir="false" afterPath="$PROJECT_DIR$/prompt.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,12 +75,23 @@
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/daryl/GitHub/DORTH"
+    "last_opened_file_path": "/Users/daryl/GitHub/DORTH/rich/console"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/rich/console" />
+      <recent name="$PROJECT_DIR$/rich" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/rich/sdl" />
+      <recent name="$PROJECT_DIR$/pitube/fonts" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/rich/UI" />
+      <recent name="$PROJECT_DIR$/rich" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/pitube" />
+      <recent name="$PROJECT_DIR$/pitube/fonts/def" />
     </key>
   </component>
   <component name="RunManager">
@@ -91,7 +100,7 @@
         <option name="CLION.EXTERNAL.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DORTH" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DORTH" TARGET_NAME="DORTH" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="DORTH" RUN_TARGET_NAME="DORTH">
+    <configuration name="DORTH" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DORTH" TARGET_NAME="DORTH" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="DORTH" RUN_TARGET_NAME="DORTH">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -110,7 +119,7 @@
       <workItem from="1642434246723" duration="4000" />
       <workItem from="1653928538343" duration="2000" />
       <workItem from="1666557211148" duration="950000" />
-      <workItem from="1666558185621" duration="1697000" />
+      <workItem from="1666558185621" duration="32446000" />
     </task>
     <servers />
   </component>

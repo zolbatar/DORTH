@@ -2,7 +2,6 @@
 #include "prompt.h"
 #ifdef PITUBE
 #include "pitube/fb.h"
-
 bool usePi = false;
 #else
 #include "rich/UI/UISDL.h"
@@ -17,7 +16,6 @@ int main()
 	fb_string_square("PiTubeDirect!", 200,200);
 	beebScreen_Flip();*/
 #endif
-	printf("Welcome to Dorth! @thezolbatar\n");
 	prompt();
 	return 0;
 }

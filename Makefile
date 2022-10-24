@@ -21,9 +21,9 @@ CFLAGS += -fno-short-enums
 LD_FLAGS := -Wl,--gc-sections -Wl,--no-print-gc-sections -Wl,-T,tube/rpi.X -Wl,-lm -Wl,-no-enum-size-warning
 
 # Add your object files here
-OBJ = main.o fb.o prompt/prompt.o \
-lightning/lightning.o lightning/jit_memory.o lightning/jit_note.o lightning/jit_size.o lightning/jit_disasm.o lightning/jit_print.o
-#fonts/bitmap_fonts.o fonts/font.o
+OBJ = main.o pitube/fb.o pitube/prompt/prompt.o pitube/keyboard.o \
+lightning/lightning.o lightning/jit_memory.o lightning/jit_note.o lightning/jit_size.o lightning/jit_disasm.o lightning/jit_print.o \
+pitube/fonts/bitmap_fonts.o pitube/fonts/font.o pitube/console/console.o
 
 # Beeb coprocessor 
 BEEB_OBJ = tube/armc-start.o tube/armtubeio.o tube/armtubeswis.o beebScreen/beebScreen.o
