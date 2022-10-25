@@ -126,7 +126,7 @@ void UISDL::Start()
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
 	// Welcome
-	console.WriteString("Welcome to Dorth! @thezolbatar\n");
+	console.WriteString("Welcome to Dorth! @thezolbatar\n\n");
 
 	bool done = false;
 	bool demo_output = false;

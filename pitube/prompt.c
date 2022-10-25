@@ -5,7 +5,7 @@
 
 void prompt()
 {
-	printf("Welcome to Dorth! @thezolbatar\n");
+	printf("Welcome to Dorth! @thezolbatar\n\n");
 	while (1)
 	{
 		uint8_t buffer[512];

@@ -23,6 +23,10 @@
   <component name="ChangeListManager">
     <list default="true" id="c0d653c8-2103-43bf-be30-0cc166b39cb5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compiler/compiler.c" beforeDir="false" afterPath="$PROJECT_DIR$/compiler/compiler.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/compiler/compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/compiler/compiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pitube/prompt.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/prompt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rich/UI/UISDL.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/rich/UI/UISDL.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +110,7 @@
       <workItem from="1666557211148" duration="950000" />
       <workItem from="1666558185621" duration="35824000" />
       <workItem from="1666693352738" duration="13501000" />
-      <workItem from="1666729357047" duration="796000" />
+      <workItem from="1666729357047" duration="3248000" />
     </task>
     <servers />
   </component>
