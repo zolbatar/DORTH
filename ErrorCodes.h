@@ -1,2 +1,0 @@
-#define ERROR_CANT_CREATE_JIT 	1
-#define ERROR_ADDING_IR 		2
