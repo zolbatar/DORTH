@@ -10,6 +10,7 @@
 #include "stb_image.h"
 #include "Lodepng.h"
 #include "../console/Console.h"
+#include "../../compiler/compiler.h"
 
 size_t frame_count = 0;
 extern Console console;
@@ -129,6 +130,7 @@ void UISDL::Start()
 
 	bool done = false;
 	bool demo_output = false;
+	std::string cmd;
 	while (!done)
 	{
 		// Process SDL events like keyboard & mouse
@@ -141,6 +143,34 @@ void UISDL::Start()
 			if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE
 				&& event.window.windowID == SDL_GetWindowID(window))
 				done = true;
+			if (event.type == SDL_TEXTINPUT)
+			{
+				cmd += event.text.text;
+				console.WriteCharacter(cmd.back());
+			}
+			else if (event.type == SDL_KEYDOWN)
+			{
+				switch (event.key.keysym.sym)
+				{
+					case SDLK_BACKSPACE:
+					{
+						if (!cmd.empty())
+						{
+							console.DeleteCharacter();
+							cmd.pop_back();
+						}
+						break;
+					}
+					case SDLK_RETURN:
+					{
+						console.WriteString("\n");
+						compile(cmd.c_str());
+						console.WriteString("ok\n");
+						cmd.clear();
+						break;
+					}
+				}
+			}
 		}
 
 		// This is so app thread can lock to load fonts etc before start of frame

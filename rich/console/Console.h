@@ -17,8 +17,10 @@ class Console
 	void SetColour(ImVec4 colour);
 	void SetColour(ImU32 colour);
 	void DeleteCharacter();
+	void MoveCursorToPrevious();
 	void MoveCursorToNext();
 	void MoveCursorToNextLine();
+	void MoveCursorToPreviousLine();
 
 	void CursorOn()
 	{
@@ -50,7 +52,7 @@ class Console
 	float w, h;
 	float size;
 	int cursorX, cursorY;
-	bool cursorActive = false;
+	bool cursorActive = true;
 
 	std::vector<ImWchar> screenText;
 	std::vector<ImU32> screenColours;

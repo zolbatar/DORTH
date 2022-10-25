@@ -18,7 +18,7 @@ include(${CMAKE_SOURCE_DIR}/cmake-build-${CMAKE_BUILD_TYPE}/conanbuildinfo.cmake
 conan_basic_setup()
 
 add_executable(DORTH
-        main.cpp
+        main.cpp compiler/compiler.c compiler/compiler.h
 
         lightning/lightning_orig.c lightning/jit_memory.c lightning/jit_disasm.c
         lightning/jit_size.c lightning/jit_note.c lightning/jit_print.c

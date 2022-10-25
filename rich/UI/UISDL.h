@@ -83,8 +83,8 @@ class UISDL
 	bool LoadTextureFromFile(const char* filename, GLuint* outTexture, int* outWidth, int* outHeight);
 
 	const float font_size = 20.0f;
-	const int console_x_size = 8;
-	const int console_y_size = 16;
+	const int console_x_size = 12;
+	const int console_y_size = 24;
 	ImU32 fgColour;
 	ImU32 bgColour;
 	std::atomic_bool flip_requested = false;

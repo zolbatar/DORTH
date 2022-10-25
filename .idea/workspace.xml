@@ -22,23 +22,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0d653c8-2103-43bf-be30-0cc166b39cb5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pitube/prompt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dorth" beforeDir="false" afterPath="$PROJECT_DIR$/Dorth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dorth.c" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bbckeycodes.h" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/bbckeycodes.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fb.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fb.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fb.h" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fb.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fonts/bitmap_fonts.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/bitmap_fonts.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fonts/font.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/font.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fonts/font.h" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/font.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fonts/stb_truetype.h" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/stb_truetype.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fonts/ttf_fonts.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/fonts/ttf_fonts.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prompt/prompt.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prompt/prompt.h" beforeDir="false" afterPath="$PROJECT_DIR$/prompt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pitube/prompt.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/prompt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rich/UI/UISDL.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/rich/UI/UISDL.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rich/UI/UISDL.h" beforeDir="false" afterPath="$PROJECT_DIR$/rich/UI/UISDL.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rich/console/Console.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/rich/console/Console.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rich/console/Console.h" beforeDir="false" afterPath="$PROJECT_DIR$/rich/console/Console.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rich/prompt.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/rich/prompt.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +54,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="23nVE9YJeDbRJTkOBODiL2Fkipi" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -67,17 +62,17 @@
     <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "last_opened_file_path": "/Users/daryl/GitHub/DORTH/rich/console"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/daryl/GitHub/DORTH/rich/console&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/rich/console" />
@@ -95,12 +90,12 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration name="DORTH" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DORTH" TARGET_NAME="DORTH" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="DORTH" RUN_TARGET_NAME="DORTH">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DORTH" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DORTH" TARGET_NAME="DORTH" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="DORTH" RUN_TARGET_NAME="DORTH">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -119,7 +114,8 @@
       <workItem from="1642434246723" duration="4000" />
       <workItem from="1653928538343" duration="2000" />
       <workItem from="1666557211148" duration="950000" />
-      <workItem from="1666558185621" duration="32446000" />
+      <workItem from="1666558185621" duration="35824000" />
+      <workItem from="1666693352738" duration="13501000" />
     </task>
     <servers />
   </component>

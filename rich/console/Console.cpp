@@ -80,6 +80,28 @@ void Console::WriteCharacter(char c)
 	}
 }
 
+void Console::DeleteCharacter()
+{
+	MoveCursorToPrevious();
+
+	auto i = CalcIndex();
+	screenText[i] = ' ';
+	screenColours[i] = colour;
+	bgColours[i] = bgColour;
+}
+
+void Console::MoveCursorToPrevious()
+{
+	// Next position
+	cursorX--;
+
+	// Next line?
+	if (cursorX == -1)
+	{
+		MoveCursorToPreviousLine();
+	}
+}
+
 void Console::MoveCursorToNext()
 {
 	// Next position
@@ -101,6 +123,18 @@ void Console::MoveCursorToNextLine()
 	if (cursorY == charsDown)
 	{
 		Scroll();
+	}
+}
+
+void Console::MoveCursorToPreviousLine()
+{
+	cursorX = 0;
+	cursorY--;
+
+	// Stay at top
+	if (cursorY == -1)
+	{
+		cursorY = 0;
 	}
 }
 
