@@ -93,6 +93,12 @@ void compile(const char* source)
 //		printf("Word at %d-%d: %s\n", start, end, (const char*)&word);
 		process_word((const char*)&word);
 	}
+
+	// Dump out list of tokens
+	c_foreach (t, clist_token, tokens)
+	{
+		printf("..\n");
+	}
 }
 
 void process_word(const char* word)
