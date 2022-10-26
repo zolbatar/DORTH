@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+void compiler_init();
 void compile(const char* source);
 
 #ifdef __cplusplus
@@ -22,6 +23,18 @@ typedef enum
 typedef struct
 {
 	token_type type;
+	union
+	{
+		double v_f;
+	};
 } token;
+
+static int token_cmp(const token* a, const token* b)
+{
+	return a == b;
+}
+#define i_val token
+#define i_cmp token_cmp
+#include "../stc/clist.h"
 
 #endif //_COMPILER_H_

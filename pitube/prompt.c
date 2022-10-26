@@ -6,6 +6,7 @@
 void prompt()
 {
 	printf("Welcome to Dorth! @thezolbatar\n\n");
+	compiler_init();
 	while (1)
 	{
 		uint8_t buffer[512];
