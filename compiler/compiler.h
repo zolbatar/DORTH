@@ -14,7 +14,6 @@ void compile(const char* source);
 
 typedef enum
 {
-	TOKEN_NONE,
 	TOKEN_WORD,
 	TOKEN_INTEGER,
 	TOKEN_FLOAT
@@ -25,6 +24,7 @@ typedef struct
 	token_type type;
 	union
 	{
+		int v_i;
 		double v_f;
 	};
 } token;

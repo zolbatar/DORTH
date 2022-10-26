@@ -11,6 +11,7 @@ regex_t reg_base;
 regex_t reg_decnum;
 regex_t reg_hexnum;
 regex_t reg_binnum;
+uint8_t base = 10;
 
 void process_word(const char* word);
 
@@ -31,12 +32,12 @@ void compiler_init()
 		printf("Error compiling regex for decimal\n");
 		exit(1);
 	}
-	if (regcomp(&reg_hexnum, "$[-0]?[0-9a-fA-F]+", REG_EXTENDED) != 0)
+	if (regcomp(&reg_hexnum, "[$][-]?[0-9a-fA-F]+", REG_EXTENDED) != 0)
 	{
 		printf("Error compiling regex for hexadecimal\n");
 		exit(1);
 	}
-	if (regcomp(&reg_binnum, "[-]?[0-1]+", REG_EXTENDED) != 0)
+	if (regcomp(&reg_binnum, "%[-]?[0-1]+", REG_EXTENDED) != 0)
 	{
 		printf("Error compiling regex for binary\n");
 		exit(1);
@@ -97,13 +98,77 @@ void compile(const char* source)
 	// Dump out list of tokens
 	c_foreach (t, clist_token, tokens)
 	{
-		printf("..\n");
+		switch (t.ref->type)
+		{
+			case TOKEN_WORD:
+				break;
+			case TOKEN_INTEGER:
+				printf("INTEGER: %d\n", t.ref->v_i);
+				break;
+			case TOKEN_FLOAT:
+				printf("FLOAT: %f\n", t.ref->v_f);
+				break;
+		}
 	}
 }
 
 void process_word(const char* word)
 {
 	size_t l = strlen(word);
+
+	if (regexec(&reg_decnum, word, 0, NULL, 0) == 0)
+	{
+		char* end;
+		long d = strtol(&word[1], &end, 10);
+		if (end != word)
+		{
+			token t;
+			t.type = TOKEN_INTEGER;
+			t.v_i = d;
+			clist_token_push_back(&tokens, t);
+			return;
+		}
+		else
+		{
+			printf("Error parsing integer literal\n");
+		}
+	}
+
+	if (regexec(&reg_hexnum, word, 0, NULL, 0) == 0)
+	{
+		char* end;
+		long d = strtol(&word[1], &end, 16);
+		if (end != word)
+		{
+			token t;
+			t.type = TOKEN_INTEGER;
+			t.v_i = d;
+			clist_token_push_back(&tokens, t);
+			return;
+		}
+		else
+		{
+			printf("Error parsing hexadecimal literal\n");
+		}
+	}
+
+	if (regexec(&reg_binnum, word, 0, NULL, 0) == 0)
+	{
+		char* end;
+		long d = strtol(&word[1], &end, 2);
+		if (end != word)
+		{
+			token t;
+			t.type = TOKEN_INTEGER;
+			t.v_i = d;
+			clist_token_push_back(&tokens, t);
+			return;
+		}
+		else
+		{
+			printf("Error parsing binary literal\n");
+		}
+	}
 
 	if (regexec(&reg_float, word, 0, NULL, 0) == 0)
 	{
@@ -119,25 +184,26 @@ void process_word(const char* word)
 		}
 		else
 		{
-			printf("Parsing double error\n");
+			printf("Error parsing floating point literal\n");
 		}
 	}
 
-	if (regexec(&reg_decnum, word, 0, NULL, 0) == 0)
+	if (regexec(&reg_base, word, 0, NULL, 0) == 0)
 	{
 		char* end;
-		double d = strtod(word, &end);
+		long d = strtol(word, &end, base);
 		if (end != word)
 		{
 			token t;
 			t.type = TOKEN_INTEGER;
-			t.v_f = d;
+			t.v_i = d;
 			clist_token_push_back(&tokens, t);
 			return;
 		}
 		else
 		{
-			printf("Parsing integer error\n");
+			printf("Error parsing base number literal\n");
 		}
 	}
+
 }
