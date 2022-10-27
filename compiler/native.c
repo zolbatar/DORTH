@@ -33,7 +33,7 @@ void native_PLUS()
 {
 	stack_pop_int(JIT_R0);
 	stack_pop_int(JIT_R1);
-	jit_addr(JIT_R0, JIT_R1, JIT_R1);
+	jit_addr(JIT_R0, JIT_R0, JIT_R1);
 	stack_push_int(JIT_R0);
 }
 

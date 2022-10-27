@@ -23,15 +23,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c0d653c8-2103-43bf-be30-0cc166b39cb5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dorth" beforeDir="false" afterPath="$PROJECT_DIR$/Dorth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/compiler/compiler.c" beforeDir="false" afterPath="$PROJECT_DIR$/compiler/compiler.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compiler/compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/compiler/compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/prompt.c" beforeDir="false" afterPath="$PROJECT_DIR$/pitube/prompt.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/console/Console.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/rich/console/Console.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

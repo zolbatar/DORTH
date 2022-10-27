@@ -207,7 +207,7 @@ void compile(const char* source)
 		return;
 	}
 
-	//jit_print();
+	jit_print();
 
 	// Do compile
 	jit_word_t sz = _jit->code.length;
@@ -235,7 +235,7 @@ void compile(const char* source)
 	_swi(OS_SynchroniseCodeAreas, _IN(0), 0);
 #endif
 
-	//disassemble(exec, code_size);
+	disassemble(exec, code_size);
 
 	jit_clear_state();
 	printf("Preparing to execute\n");
