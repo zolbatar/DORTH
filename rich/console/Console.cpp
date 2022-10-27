@@ -3,6 +3,11 @@
 
 Console console;
 
+extern "C" void console_print(const char* buffer)
+{
+	console.WriteString(buffer);
+}
+
 void Console::Setup(int w, int h, float dpiRatio, int sx, int sy, bool banked)
 {
 	this->banked = banked;

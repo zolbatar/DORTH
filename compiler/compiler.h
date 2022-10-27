@@ -38,4 +38,15 @@ static int token_cmp(const token* a, const token* b)
 #define i_cmp token_cmp
 #include "../stc/clist.h"
 
+typedef struct
+{
+	void (*compile)(void);
+	void (*interpret)(void);
+} word;
+
+#include "../stc/cstr.h"
+#define i_key_str
+#define i_val word
+#include "../stc/cmap.h"
+
 #endif //_COMPILER_H_

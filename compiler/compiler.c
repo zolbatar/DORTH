@@ -2,11 +2,18 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "compiler.h"
 #include "../lightning/lightning.h"
 #include "../lightning/jit_private.h"
 #include <capstone/capstone.h>
+#include "compiler.h"
+#include "stack.h"
 
+#ifdef PITUBE
+#include "../tube/swis.h"
+#endif
+
+extern void native_init();
+cmap_str words;
 clist_token tokens;
 uint8_t base = 10;
 jit_state_t* _jit;
@@ -80,6 +87,7 @@ static void disassemble(start exec, jit_word_t sz)
 
 void compiler_init()
 {
+	native_init();
 	setup_capstone();
 	init_jit("Daric");
 }
@@ -130,23 +138,30 @@ void compile(const char* source)
 	if (last_end != l && start != -1)
 	{
 		end = l;
-		copy[end] = 0;
 		process_word((const char*)&copy[start]);
 	}
 
-	// Dump out list of tokens
+	// Validate
 	c_foreach (t, clist_token, tokens)
 	{
 		switch (t.ref->type)
 		{
 			case TOKEN_WORD:
-				printf("WORD: '%s'\n", t.ref->word);
+			{
+				//printf("WORD: '%s'\n", t.ref->word);
+				cmap_str_iter iter = cmap_str_find(&words, t.ref->word);
+				if (iter.ref == NULL)
+				{
+					printf("Word '%s' not found\n", t.ref->word);
+					return;
+				}
 				break;
+			}
 			case TOKEN_INTEGER:
-				printf("INTEGER: %d\n", t.ref->v_i);
+				//printf("INTEGER: %d\n", t.ref->v_i);
 				break;
 			case TOKEN_FLOAT:
-				printf("FLOAT: %f\n", t.ref->v_f);
+				//printf("FLOAT: %f\n", t.ref->v_f);
 				break;
 		}
 	}
@@ -156,6 +171,31 @@ void compile(const char* source)
 
 	// This is the stub to call into the implicit function
 	jit_prolog();
+	stack_init();
+
+	// Compile
+	c_foreach (t, clist_token, tokens)
+	{
+		switch (t.ref->type)
+		{
+			case TOKEN_WORD:
+			{
+				cmap_str_iter iter = cmap_str_find(&words, t.ref->word);
+				iter.ref->second.
+					compile();
+				break;
+			}
+			case TOKEN_INTEGER:
+				jit_movi(JIT_R0, t.ref->v_i);
+				stack_push_int(JIT_R0);
+				break;
+			case TOKEN_FLOAT:
+				jit_movi_d(JIT_F0, t.ref->v_f);
+				stack_push_float(JIT_F0);
+				break;
+		}
+	}
+
 	jit_ret();
 	jit_epilog();
 
@@ -167,7 +207,7 @@ void compile(const char* source)
 		return;
 	}
 
-	jit_print();
+	//jit_print();
 
 	// Do compile
 	jit_word_t sz = _jit->code.length;
@@ -195,7 +235,7 @@ void compile(const char* source)
 	_swi(OS_SynchroniseCodeAreas, _IN(0), 0);
 #endif
 
-	disassemble(exec, code_size);
+	//disassemble(exec, code_size);
 
 	jit_clear_state();
 	printf("Preparing to execute\n");

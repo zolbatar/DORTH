@@ -6,6 +6,7 @@ bool usePi = false;
 #else
 #include "rich/UI/UISDL.h"
 #endif
+#include "compiler/compiler.h"
 
 int main()
 {
@@ -16,6 +17,8 @@ int main()
 	fb_string_square("PiTubeDirect!", 200,200);
 	beebScreen_Flip();*/
 #endif
+	compiler_init();
 	prompt();
+//	compile("100 100 + .");
 	return 0;
 }

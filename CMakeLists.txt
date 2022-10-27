@@ -59,7 +59,7 @@ add_executable(DORTH
         rich/console/Console.cpp
 
         ImGuiBindings/imgui_impl_opengl3.cpp
-        ImGuiBindings/imgui_impl_sdl.cpp)
+        ImGuiBindings/imgui_impl_sdl.cpp compiler/stack.c compiler/stack.h compiler/native.c compiler/native.h)
 target_link_libraries(${PROJECT_NAME} ${LIBS} ${CONAN_LIBS})
 #add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND xxd -i -n Dorth ${PROJECT_SOURCE_DIR}/Dorth > ${PROJECT_SOURCE_DIR}/Dorth.c)
 

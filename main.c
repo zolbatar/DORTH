@@ -11,7 +11,7 @@ bool usePi = false;
 int main()
 {
 #ifdef PITUBE
-	fb_init();
+//	fb_init();
 /*	printf("Welcome to PiTubeDirect Dorth! Created by @thezolbatar.\n");
 	fb_string("Hello!",100,100);
 	fb_string_square("PiTubeDirect!", 200,200);
