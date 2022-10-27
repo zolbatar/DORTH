@@ -3,45 +3,85 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "compiler.h"
-#include <regex.h>
+#include "../lightning/lightning.h"
+#include "../lightning/jit_private.h"
+#include <capstone/capstone.h>
 
 clist_token tokens;
-regex_t reg_float;
-regex_t reg_base;
-regex_t reg_decnum;
-regex_t reg_hexnum;
-regex_t reg_binnum;
 uint8_t base = 10;
+jit_state_t* _jit;
+typedef int (* start)(void);
 
 void process_word(const char* word);
 
+static void setup_capstone()
+{
+#ifndef DISABLE_DISASM
+	// Setup capstone
+	cs_opt_mem setup;
+	setup.malloc = malloc;
+	setup.calloc = calloc;
+	setup.realloc = realloc;
+	setup.free = free;
+	setup.vsnprintf = vsnprintf;
+	cs_err err = cs_option(0, CS_OPT_MEM, (size_t)&setup);
+	if (err != CS_ERR_OK)
+	{
+		printf("Error (cs_option): %d\n", err);
+	}
+#endif
+}
+
+static void disassemble(start exec, jit_word_t sz)
+{
+#ifndef DISABLE_DISASM
+	// Disassemble
+	csh handle;
+	cs_insn* insn;
+	size_t count;
+#ifdef CAPSTONE_HAS_X86
+	printf("Disassembly architecture: X86\n");
+	cs_err err = cs_open(CS_ARCH_X86, CS_MODE_64, &handle);
+#else
+#ifdef PITUBE
+	printf("Disassembly architecture: ARM\n");
+	cs_err err = cs_open(CS_ARCH_ARM, CS_MODE_ARM, &handle);
+#else
+	printf("Disassembly architecture: AARCH64\n");
+	cs_err err = cs_open(CS_ARCH_ARM64, CS_MODE_ARM, &handle);
+#endif
+#endif
+	if (err != CS_ERR_OK)
+	{
+		printf("Disassemble error: %d\n", err);
+	}
+	cs_option(handle, CS_OPT_DETAIL, CS_OPT_ON);
+	count = cs_disasm(handle, (const unsigned char*)exec, sz, (size_t)_jit->code.ptr, 0, &insn);
+	printf("There are %u CPU instructions\n", count);
+	if (count > 0)
+	{
+		for (size_t j = 0; j < count; j++)
+		{
+#ifdef PITUBE
+			printf("0x%X:\t%s\t%s\n", (uint32_t)insn[j].address, insn[j].mnemonic, insn[j].op_str);
+#else
+			printf("0x%" PRIx64 ":\t%s\t%s\n", insn[j].address, insn[j].mnemonic, insn[j].op_str);
+#endif
+		}
+		cs_free(insn, count);
+	}
+	else
+	{
+		printf("ERROR: Failed to disassemble given code!");
+	}
+	cs_close(&handle);
+#endif
+}
+
 void compiler_init()
 {
-	if (regcomp(&reg_float, "[-+]?[0-9]+[.][0-9]+([E][-+]?[0-9]+)?", REG_EXTENDED) != 0)
-	{
-		printf("Error compiling regex for float\n");
-		exit(1);
-	}
-	if (regcomp(&reg_base, "[-]?[0-9a-zA-Z]+", REG_EXTENDED) != 0)
-	{
-		printf("Error compiling regex for base\n");
-		exit(1);
-	}
-	if (regcomp(&reg_decnum, "#[-]?[0-9]+", REG_EXTENDED) != 0)
-	{
-		printf("Error compiling regex for decimal\n");
-		exit(1);
-	}
-	if (regcomp(&reg_hexnum, "[$][-]?[0-9a-fA-F]+", REG_EXTENDED) != 0)
-	{
-		printf("Error compiling regex for hexadecimal\n");
-		exit(1);
-	}
-	if (regcomp(&reg_binnum, "%[-]?[0-1]+", REG_EXTENDED) != 0)
-	{
-		printf("Error compiling regex for binary\n");
-		exit(1);
-	}
+	setup_capstone();
+	init_jit("Daric");
 }
 
 void compile(const char* source)
@@ -50,6 +90,11 @@ void compile(const char* source)
 	size_t l = strlen(source);
 	if (l == 0)
 		return;
+
+	// Copy it
+	char copy[l];
+	strncpy(copy, source, l);
+	copy[l] = 0;
 
 	// Process one token at a time
 	int start = -1;
@@ -64,13 +109,10 @@ void compile(const char* source)
 			if (start != -1)
 			{
 				end = i;
-				char word[end - start + 1];
-				strncpy(word, source + start, end - start);
-				word[end - start] = 0;
-//				printf("Word at %d-%d: %s\n", start, end, (const char*)&word);
+				copy[end] = 0;
+				process_word((const char*)&copy[start]);
 				last_end = end;
 				start = -1;
-				process_word((const char*)&word);
 			}
 			else
 			{
@@ -88,11 +130,8 @@ void compile(const char* source)
 	if (last_end != l && start != -1)
 	{
 		end = l;
-		char word[end - start + 1];
-		strncpy(word, source + start, end - start);
-		word[end - start] = 0;
-//		printf("Word at %d-%d: %s\n", start, end, (const char*)&word);
-		process_word((const char*)&word);
+		copy[end] = 0;
+		process_word((const char*)&copy[start]);
 	}
 
 	// Dump out list of tokens
@@ -101,6 +140,7 @@ void compile(const char* source)
 		switch (t.ref->type)
 		{
 			case TOKEN_WORD:
+				printf("WORD: '%s'\n", t.ref->word);
 				break;
 			case TOKEN_INTEGER:
 				printf("INTEGER: %d\n", t.ref->v_i);
@@ -110,21 +150,79 @@ void compile(const char* source)
 				break;
 		}
 	}
+
+	// Now let's compile it
+	_jit = jit_new_state();
+
+	// This is the stub to call into the implicit function
+	jit_prolog();
+	jit_ret();
+	jit_epilog();
+
+	// Code & data size
+	jit_realize();
+	if (!_jitc->realize)
+	{
+		printf("Failed to realise");
+		return;
+	}
+
+	jit_print();
+
+	// Do compile
+	jit_word_t sz = _jit->code.length;
+#ifndef RICH
+	void* code = malloc(sz);
+
+	jit_set_code(code, sz);
+	jit_set_data(NULL, 0, JIT_DISABLE_NOTE | JIT_DISABLE_NOTE);
+#endif
+	int (* exec)(void) = jit_emit_void();
+	if (exec == NULL)
+	{
+		printf("Code generation failed");
+		return;
+	}
+
+	// Size?
+	jit_word_t code_size;
+	jit_get_code(&code_size);
+#ifdef VERBOSE_COMPILE
+	printf("Code size: %ld [%ld] bytes\n", code_size, sz);
+#endif
+
+#ifdef PITUBE
+	_swi(OS_SynchroniseCodeAreas, _IN(0), 0);
+#endif
+
+	disassemble(exec, code_size);
+
+	jit_clear_state();
+	printf("Preparing to execute\n");
+	exec();
+	printf("Execution complete\n");
+	jit_destroy_state();
+#ifndef RICH
+	free(code);
+#endif
+	finish_jit();
+	return;
 }
 
 void process_word(const char* word)
 {
 	size_t l = strlen(word);
+	char* end;
 
-	if (regexec(&reg_decnum, word, 0, NULL, 0) == 0)
+	// Decimal
+	if (word[0] == '#')
 	{
-		char* end;
-		long d = strtol(&word[1], &end, 10);
+		long i = strtol(&word[1], &end, 10);
 		if (end != word)
 		{
 			token t;
 			t.type = TOKEN_INTEGER;
-			t.v_i = d;
+			t.v_i = i;
 			clist_token_push_back(&tokens, t);
 			return;
 		}
@@ -134,45 +232,45 @@ void process_word(const char* word)
 		}
 	}
 
-	if (regexec(&reg_hexnum, word, 0, NULL, 0) == 0)
+	// Hexadecimal
+	if (word[0] == '$')
 	{
-		char* end;
-		long d = strtol(&word[1], &end, 16);
+		long i = strtol(&word[1], &end, 16);
 		if (end != word)
 		{
 			token t;
 			t.type = TOKEN_INTEGER;
-			t.v_i = d;
+			t.v_i = i;
 			clist_token_push_back(&tokens, t);
 			return;
 		}
 		else
 		{
-			printf("Error parsing hexadecimal literal\n");
+			printf("Error parsing integer literal\n");
 		}
 	}
 
-	if (regexec(&reg_binnum, word, 0, NULL, 0) == 0)
+	// Binary
+	if (word[0] == '%')
 	{
-		char* end;
-		long d = strtol(&word[1], &end, 2);
+		long i = strtol(&word[1], &end, 2);
 		if (end != word)
 		{
 			token t;
 			t.type = TOKEN_INTEGER;
-			t.v_i = d;
+			t.v_i = i;
 			clist_token_push_back(&tokens, t);
 			return;
 		}
 		else
 		{
-			printf("Error parsing binary literal\n");
+			printf("Error parsing integer literal\n");
 		}
 	}
 
-	if (regexec(&reg_float, word, 0, NULL, 0) == 0)
+	// Float?
+	if (strstr(word, "."))
 	{
-		char* end;
 		double d = strtod(word, &end);
 		if (end != word)
 		{
@@ -182,28 +280,23 @@ void process_word(const char* word)
 			clist_token_push_back(&tokens, t);
 			return;
 		}
-		else
-		{
-			printf("Error parsing floating point literal\n");
-		}
 	}
 
-	if (regexec(&reg_base, word, 0, NULL, 0) == 0)
+	// Base?
+	long i = strtol(word, &end, base);
+	if (end != word)
 	{
-		char* end;
-		long d = strtol(word, &end, base);
-		if (end != word)
-		{
-			token t;
-			t.type = TOKEN_INTEGER;
-			t.v_i = d;
-			clist_token_push_back(&tokens, t);
-			return;
-		}
-		else
-		{
-			printf("Error parsing base number literal\n");
-		}
+		token t;
+		t.type = TOKEN_INTEGER;
+		t.v_i = i;
+		clist_token_push_back(&tokens, t);
+		return;
 	}
 
+	// Gotta be a word!
+	token t;
+	t.type = TOKEN_WORD;
+	t.word = word;
+	clist_token_push_back(&tokens, t);
+	return;
 }

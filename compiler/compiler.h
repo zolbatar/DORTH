@@ -24,6 +24,7 @@ typedef struct
 	token_type type;
 	union
 	{
+		const char* word;
 		int v_i;
 		double v_f;
 	};
