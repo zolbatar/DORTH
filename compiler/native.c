@@ -7,6 +7,7 @@
 void console_print(const char*);
 #endif
 
+extern clist_token tokens;
 extern cmap_str words;
 extern jit_state_t* _jit;
 
@@ -21,20 +22,22 @@ static void __DOT(int i)
 #endif
 }
 
-void native_DOT()
+void native_DOT(clist_token_iter* t)
 {
-	stack_pop_int(JIT_R0);
-	jit_prepare();
-	jit_pushargr(JIT_R0);
-	jit_finishi(&__DOT);
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_CALLNATIVE, .native = &__DOT });
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_INT0, 0 });
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_DEC_SP, 1 });
 }
 
-void native_PLUS()
+void native_PLUS(clist_token_iter* t)
 {
-	stack_pop_int(JIT_R0);
-	stack_pop_int(JIT_R1);
-	jit_addr(JIT_R0, JIT_R0, JIT_R1);
-	stack_push_int(JIT_R0);
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_INC_SP, 1 });
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_PUSH_INT0, 0 });
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_ADD });
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_INT1, 0 });
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_DEC_SP, 1 });
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_INT0, 0 });
+	clist_token_insert_at(&tokens, *t, (token){ TOKEN_DEC_SP, 1 });
 }
 
 void native_init()

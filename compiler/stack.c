@@ -20,24 +20,24 @@ void save_stack_ptr()
 void stack_push_int(int reg)
 {
 	jit_str(JIT_V0, reg);
-	jit_addi(JIT_V0, JIT_V0, sizeof(size_t));
+	jit_addi(JIT_V0, JIT_V0, SS);
 }
 
 void stack_pop_int(int reg)
 {
-	jit_subi(JIT_V0, JIT_V0, sizeof(size_t));
+	jit_subi(JIT_V0, JIT_V0, SS);
 	jit_ldr(reg, JIT_V0);
 }
 
 void stack_push_float(int reg)
 {
 	jit_str_d(JIT_V0, reg);
-	jit_addi(JIT_V0, JIT_V0, sizeof(double));
+	jit_addi(JIT_V0, JIT_V0, SS);
 }
 
 void stack_pop_float(int reg)
 {
-	jit_subi(JIT_V0, JIT_V0, sizeof(double));
+	jit_subi(JIT_V0, JIT_V0, SS);
 	jit_ldr_d(reg, JIT_V0);
 }
 

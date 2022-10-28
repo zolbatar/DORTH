@@ -14,11 +14,8 @@ void process_word(const char* word)
 		long i = strtol(&word[1], &end, 10);
 		if (end != word)
 		{
-			token t;
-			t.type = TOKEN_INTEGER;
-			t.sequence = 0;
-			t.v_i = i;
-			clist_token_push_back(&tokens, t);
+			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0, .v_i = i });
+			clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
 			return;
 		}
 		else
@@ -33,11 +30,8 @@ void process_word(const char* word)
 		long i = strtol(&word[1], &end, 16);
 		if (end != word)
 		{
-			token t;
-			t.type = TOKEN_INTEGER;
-			t.sequence = 0;
-			t.v_i = i;
-			clist_token_push_back(&tokens, t);
+			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0, .v_i = i });
+			clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
 			return;
 		}
 		else
@@ -52,11 +46,8 @@ void process_word(const char* word)
 		long i = strtol(&word[1], &end, 2);
 		if (end != word)
 		{
-			token t;
-			t.type = TOKEN_INTEGER;
-			t.sequence = 0;
-			t.v_i = i;
-			clist_token_push_back(&tokens, t);
+			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0, .v_i = i });
+			clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
 			return;
 		}
 		else
@@ -71,11 +62,8 @@ void process_word(const char* word)
 		double d = strtod(word, &end);
 		if (end != word)
 		{
-			token t;
-			t.type = TOKEN_FLOAT;
-			t.sequence = 0;
-			t.v_f = d;
-			clist_token_push_back(&tokens, t);
+			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_FLOAT, 0, .v_f = d });
+			clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
 			return;
 		}
 	}
@@ -84,19 +72,12 @@ void process_word(const char* word)
 	long i = strtol(word, &end, base);
 	if (end != word)
 	{
-		token t;
-		t.type = TOKEN_INTEGER;
-		t.sequence = 0;
-		t.v_i = i;
-		clist_token_push_back(&tokens, t);
+		clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0, .v_i = i });
+		clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
 		return;
 	}
 
 	// Gotta be a word!
-	token t;
-	t.type = TOKEN_WORD;
-	t.sequence = 0;
-	t.word = word;
-	clist_token_push_back(&tokens, t);
+	clist_token_push_back(&tokens, (token){ TOKEN_WORD, 0, .word=word });
 	return;
 }

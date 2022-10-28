@@ -23,9 +23,17 @@ void disassemble(start exec, jit_word_t sz);
 
 typedef enum
 {
+	TOKEN_PUSH_INTEGER,
+	TOKEN_PUSH_FLOAT,
+	TOKEN_INC_SP,
+	TOKEN_DEC_SP,
+	TOKEN_POP_INT0,
+	TOKEN_POP_INT1,
+	TOKEN_PUSH_INT0,
 	TOKEN_WORD,
-	TOKEN_INTEGER,
-	TOKEN_FLOAT
+	TOKEN_CALLNATIVE,
+
+	TOKEN_ADD,
 } token_type;
 
 typedef struct
@@ -36,6 +44,7 @@ typedef struct
 	union
 	{
 		const char* word;
+		void* native;
 		int v_i;
 		double v_f;
 	};
@@ -51,7 +60,7 @@ static int token_cmp(const token* a, const token* b)
 
 typedef struct
 {
-	void (* compile)(void);
+	void (* compile)(clist_token_iter* t);
 	void (* interpret)(void);
 } word;
 

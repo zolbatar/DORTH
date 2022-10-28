@@ -26,9 +26,49 @@ void compiler_init()
 	init_jit("Daric");
 }
 
-static void validate()
+static void dump_ir()
 {
-	// Validate
+	c_foreach (t, clist_token, tokens)
+	{
+		switch (t.ref->type)
+		{
+			case TOKEN_WORD:
+				printf("WORD: '%s'\n", t.ref->word);
+				break;
+			case TOKEN_PUSH_INTEGER:
+				printf("INTEGER: %d:%d\n", t.ref->v_i, t.ref->sequence);
+				break;
+			case TOKEN_PUSH_FLOAT:
+				printf("FLOAT: %f:%d\n", t.ref->v_f, t.ref->sequence);
+				break;
+			case TOKEN_INC_SP:
+				printf("INC SP: %d\n", t.ref->sequence);
+				break;
+			case TOKEN_DEC_SP:
+				printf("DEC SP: %d\n", t.ref->sequence);
+				break;
+			case TOKEN_POP_INT0:
+				printf("POP R0\n");
+				break;
+			case TOKEN_POP_INT1:
+				printf("POP R1\n");
+				break;
+			case TOKEN_PUSH_INT0:
+				printf("PUSH R0\n");
+				break;
+			case TOKEN_CALLNATIVE:
+				printf("CALL %p\n", t.ref->native);
+				break;
+
+			case TOKEN_ADD:
+				printf("R0=R0+R1\n");
+				break;
+		}
+	}
+}
+
+static void optimise()
+{
 	clist_token_value* prev = NULL;
 	c_foreach (t, clist_token, tokens)
 	{
@@ -44,36 +84,26 @@ static void validate()
 		{
 			case TOKEN_WORD:
 			{
-				//printf("WORD: '%s'\n", t.ref->word);
 				cmap_str_iter iter = cmap_str_find(&words, t.ref->word);
 				if (iter.ref == NULL)
 				{
 					printf("Word '%s' not found\n", t.ref->word);
 					return;
 				}
+				iter.ref->second.compile(&t);
 				break;
 			}
-			case TOKEN_INTEGER:
-				if (prev != NULL && prev->type == TOKEN_INTEGER)
-				{
-					if (prev->sequence == 0)
-					{
-						prev->sequence = 1;
-					}
-					t.ref->sequence = prev->sequence + 1;
-				}
-				printf("INTEGER: %d:%d\n", t.ref->v_i, t.ref->sequence);
+			case TOKEN_PUSH_INTEGER:
+			case TOKEN_PUSH_FLOAT:
+			case TOKEN_INC_SP:
+			case TOKEN_DEC_SP:
+			case TOKEN_PUSH_INT0:
+			case TOKEN_POP_INT0:
+			case TOKEN_POP_INT1:
 				break;
-			case TOKEN_FLOAT:
-				if (prev != NULL && prev->type == TOKEN_FLOAT)
-				{
-					if (prev->sequence == 0)
-					{
-						prev->sequence = 1;
-					}
-					t.ref->sequence = prev->sequence + 1;
-				}
-				printf("FLOAT: %f:%d\n", t.ref->v_f, t.ref->sequence);
+
+			case TOKEN_CALLNATIVE:
+			case TOKEN_ADD:
 				break;
 		}
 		prev = t.ref;
@@ -129,7 +159,8 @@ void compile(const char* source)
 		process_word((const char*)&copy[start]);
 	}
 
-	validate();
+	optimise();
+	dump_ir();
 
 	// Now let's compile it
 	_jit = jit_new_state();
@@ -138,7 +169,7 @@ void compile(const char* source)
 	jit_prolog();
 	stack_init();
 
-	// Compile
+	// Compile, we should have optimised by now
 	c_foreach (t, clist_token, tokens)
 	{
 		switch (t.ref->type)
@@ -146,28 +177,40 @@ void compile(const char* source)
 			case TOKEN_WORD:
 			{
 				cmap_str_iter iter = cmap_str_find(&words, t.ref->word);
-				iter.ref->second.
-					compile();
+//				iter.ref->second.compile();
 				break;
 			}
-			case TOKEN_INTEGER:
+			case TOKEN_PUSH_INTEGER:
 				jit_movi(JIT_R0, t.ref->v_i);
-				if (t.ref->sequence == 0)
-				{
-					stack_push_int(JIT_R0);
-				}
-				else
-				{
-					jit_stxi((t.ref->sequence - 1) * sizeof(size_t), JIT_V0, JIT_R0);
-				}
-				if (t.ref->reset)
-				{
-					jit_addi(JIT_V0, JIT_V0, sizeof(size_t) * t.ref->sequence);
-				}
+				jit_stxi(t.ref->sequence * SS, JIT_V0, JIT_R0);
 				break;
-			case TOKEN_FLOAT:
+			case TOKEN_PUSH_FLOAT:
 				jit_movi_d(JIT_F0, t.ref->v_f);
-				stack_push_float(JIT_F0);
+				jit_stxi_d(t.ref->sequence * SS, JIT_V0, JIT_F0);
+				break;
+			case TOKEN_INC_SP:
+				jit_addi(JIT_V0, JIT_V0, t.ref->sequence * SS);
+				break;
+			case TOKEN_DEC_SP:
+				jit_subi(JIT_V0, JIT_V0, t.ref->sequence * SS);
+				break;
+			case TOKEN_PUSH_INT0:
+				jit_stxi(t.ref->sequence * SS, JIT_V0, JIT_R0);
+				break;
+			case TOKEN_POP_INT0:
+				jit_ldxi(JIT_R0, JIT_V0, t.ref->sequence * SS);
+				break;
+			case TOKEN_POP_INT1:
+				jit_ldxi(JIT_R1, JIT_V0, t.ref->sequence * SS);
+				break;
+
+			case TOKEN_CALLNATIVE:
+				jit_prepare();
+				jit_pushargr(JIT_R0);
+				jit_finishi(t.ref->native);
+				break;
+			case TOKEN_ADD:
+				jit_addr(JIT_R0, JIT_R0, JIT_R1);
 				break;
 		}
 	}
