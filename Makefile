@@ -22,7 +22,7 @@ LD_FLAGS := -Wl,--gc-sections -Wl,--no-print-gc-sections -Wl,-T,tube/rpi.X -Wl,-
 
 # Add your object files here
 OBJ = main.o pitube/fb.o pitube/prompt.o pitube/keyboard.o \
-compiler/compiler.o compiler/native.o compiler/stack.o \
+compiler/compiler.o compiler/native.o compiler/stack.o compiler/disassemble.o compiler/optimiser.o compiler/word.o \
 lightning/lightning.o lightning/jit_memory.o lightning/jit_note.o lightning/jit_size.o lightning/jit_disasm.o lightning/jit_print.o \
 capstone/arch/ARM/ARMDisassembler.o capstone/arch/ARM/ARMInstPrinter.o capstone/arch/ARM/ARMMapping.o capstone/arch/ARM/ARMModule.o \
 capstone/cs.o capstone/MCInst.o capstone/MCInstrDesc.o capstone/MCRegisterInfo.o capstone/SStream.o capstone/utils.o \

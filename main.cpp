@@ -19,6 +19,6 @@ int main()
 #endif
 	compiler_init();
 //	prompt();
-	compile("100 250 + . 100 250 - . 123 .");
+	compile("200 DROP 100 250 + . 100 250 - . 123 .");
 	return 0;
 }

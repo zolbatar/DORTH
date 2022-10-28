@@ -1,7 +1,7 @@
 #include "compiler.h"
 
 extern clist_token tokens;
-cmap_str words;
+extern cmap_str words;
 
 #define COMPACT_STACKS
 

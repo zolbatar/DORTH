@@ -4,11 +4,9 @@
 #include <stdio.h>
 #include "compiler.h"
 #include "stack.h"
-
-// 29 instructions, 5 stack ops
-
 #ifdef PITUBE
 #include "../tube/swis.h"
+extern char get_key();
 #endif
 
 extern void native_init();
@@ -75,6 +73,11 @@ static void dump_ir()
 	}
 }
 
+void test()
+{
+	printf("11111\n");
+}
+
 void compile(const char* source)
 {
 	tokens = clist_token_init();
@@ -130,8 +133,6 @@ void compile(const char* source)
 
 	// Now let's compile it
 	_jit = jit_new_state();
-
-	// This is the stub to call into the implicit function
 	jit_prolog();
 	stack_init();
 
@@ -145,11 +146,7 @@ void compile(const char* source)
 		switch (t.ref->type)
 		{
 			case TOKEN_WORD:
-			{
-				cmap_str_iter iter = cmap_str_find(&words, t.ref->word);
-//				iter.ref->second.compile();
-				break;
-			}
+				assert(0);
 			case TOKEN_PUSH_INTEGER:
 				jit_movi(JIT_R0, t.ref->v_i);
 				jit_stxi(t.ref->sequence * SS, JIT_V0, JIT_R0);
@@ -203,7 +200,7 @@ void compile(const char* source)
 		return;
 	}
 
-	//jit_print();
+//	jit_print();
 
 	// Do compile
 	jit_word_t sz = _jit->code.length;
@@ -227,14 +224,14 @@ void compile(const char* source)
 	printf("Code size: %ld [%ld] bytes\n", code_size, sz);
 #endif
 
+//	disassemble(exec, code_size);
+
 #ifdef PITUBE
 	_swi(OS_SynchroniseCodeAreas, _IN(0), 0);
 #endif
 
-	disassemble(exec, code_size);
-
 	jit_clear_state();
-	printf("Preparing to execute\n");
+	printf("Preparing to execute at %p\n", exec);
 	exec();
 	printf("Execution complete\n");
 	jit_destroy_state();

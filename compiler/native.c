@@ -11,7 +11,7 @@ extern clist_token tokens;
 extern cmap_str words;
 extern jit_state_t* _jit;
 
-static void __DOT(int i)
+void __DOT(int i)
 {
 #ifdef PITUBE
 	printf("%d ", i);
@@ -44,10 +44,16 @@ void native_PLUS(clist_token_iter* t)
 	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_R1, 0, 1, 0 });
 }
 
+void native_DROP(clist_token_iter* t)
+{
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_R0, 0, 1, 0 });
+}
+
 void native_init()
 {
 	words = cmap_str_init();
 	cmap_str_emplace(&words, ".", (word){ &native_DOT, NULL });
 	cmap_str_emplace(&words, "-", (word){ &native_MINUS, NULL });
 	cmap_str_emplace(&words, "+", (word){ &native_PLUS, NULL });
+	cmap_str_emplace(&words, "DROP", (word){ &native_DROP, NULL });
 }

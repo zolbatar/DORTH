@@ -3,7 +3,7 @@
 #include "../lightning/jit_private.h"
 
 extern jit_state_t* _jit;
-#define STACK_SIZE 2048
+#define STACK_SIZE 256
 size_t stack[STACK_SIZE];
 size_t stack_ptr;
 
