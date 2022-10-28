@@ -24,25 +24,30 @@ static void __DOT(int i)
 
 void native_DOT(clist_token_iter* t)
 {
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_CALLNATIVE, .native = &__DOT });
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_INT0, 0 });
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_DEC_SP, 1 });
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_CALLNATIVE, 0, 0, 0, .native = &__DOT });
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_R0, 0, 1, 0 });
+}
+
+void native_MINUS(clist_token_iter* t)
+{
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_PUSH_R0, 0, 0, 1 });
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_SUBTRACT });
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_R0, 0, 1, 0 });
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_R1, 0, 1, 0 });
 }
 
 void native_PLUS(clist_token_iter* t)
 {
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_INC_SP, 1 });
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_PUSH_INT0, 0 });
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_ADD });
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_INT1, 0 });
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_DEC_SP, 1 });
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_INT0, 0 });
-	clist_token_insert_at(&tokens, *t, (token){ TOKEN_DEC_SP, 1 });
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_PUSH_R0, 0, 0, 1 });
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_ADD });
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_R0, 0, 1, 0 });
+	*t = clist_token_insert_at(&tokens, *t, (token){ TOKEN_POP_R1, 0, 1, 0 });
 }
 
 void native_init()
 {
 	words = cmap_str_init();
 	cmap_str_emplace(&words, ".", (word){ &native_DOT, NULL });
+	cmap_str_emplace(&words, "-", (word){ &native_MINUS, NULL });
 	cmap_str_emplace(&words, "+", (word){ &native_PLUS, NULL });
 }

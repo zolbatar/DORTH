@@ -14,8 +14,7 @@ void process_word(const char* word)
 		long i = strtol(&word[1], &end, 10);
 		if (end != word)
 		{
-			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0, .v_i = i });
-			clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
+			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0,0, 1, .v_i = i });
 			return;
 		}
 		else
@@ -30,8 +29,7 @@ void process_word(const char* word)
 		long i = strtol(&word[1], &end, 16);
 		if (end != word)
 		{
-			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0, .v_i = i });
-			clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
+			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0,0, 1, .v_i = i });
 			return;
 		}
 		else
@@ -46,8 +44,7 @@ void process_word(const char* word)
 		long i = strtol(&word[1], &end, 2);
 		if (end != word)
 		{
-			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0, .v_i = i });
-			clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
+			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0,0, 1, .v_i = i });
 			return;
 		}
 		else
@@ -62,8 +59,7 @@ void process_word(const char* word)
 		double d = strtod(word, &end);
 		if (end != word)
 		{
-			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_FLOAT, 0, .v_f = d });
-			clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
+			clist_token_push_back(&tokens, (token){ TOKEN_PUSH_FLOAT, 0, 0,1, .v_f = d });
 			return;
 		}
 	}
@@ -72,12 +68,11 @@ void process_word(const char* word)
 	long i = strtol(word, &end, base);
 	if (end != word)
 	{
-		clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0, .v_i = i });
-		clist_token_push_back(&tokens, (token){ TOKEN_INC_SP, 1 });
+		clist_token_push_back(&tokens, (token){ TOKEN_PUSH_INTEGER, 0, 0,1, .v_i = i });
 		return;
 	}
 
 	// Gotta be a word!
-	clist_token_push_back(&tokens, (token){ TOKEN_WORD, 0, .word=word });
+	clist_token_push_back(&tokens, (token){ TOKEN_WORD, 0,0,0, .word=word });
 	return;
 }

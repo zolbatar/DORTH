@@ -18,7 +18,7 @@ int main()
 	beebScreen_Flip();*/
 #endif
 	compiler_init();
-	prompt();
-//	compile("100 100 + .");
+//	prompt();
+	compile("100 250 + . 100 250 - . 123 .");
 	return 0;
 }

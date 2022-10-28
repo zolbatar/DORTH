@@ -14,6 +14,8 @@ extern "C" {
 
 void compiler_init();
 void compile(const char* source);
+void expand();
+void optimise();
 void setup_capstone();
 void disassemble(start exec, jit_word_t sz);
 
@@ -25,22 +27,26 @@ typedef enum
 {
 	TOKEN_PUSH_INTEGER,
 	TOKEN_PUSH_FLOAT,
-	TOKEN_INC_SP,
-	TOKEN_DEC_SP,
-	TOKEN_POP_INT0,
-	TOKEN_POP_INT1,
-	TOKEN_PUSH_INT0,
+	TOKEN_POP_R0,
+	TOKEN_POP_R1,
+	TOKEN_PUSH_R0,
 	TOKEN_WORD,
 	TOKEN_CALLNATIVE,
 
+	// Optimised tokens
+	TOKEN_INTEGER_TO_R0,
+	TOKEN_INTEGER_TO_R1,
+
 	TOKEN_ADD,
+	TOKEN_SUBTRACT,
 } token_type;
 
 typedef struct
 {
 	token_type type;
-	unsigned sequence;
-	bool reset;
+	uint8_t sequence;
+	uint8_t pops;
+	uint8_t pushes;
 	union
 	{
 		const char* word;

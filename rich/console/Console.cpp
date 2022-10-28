@@ -1,15 +1,24 @@
 #include <iostream>
 #include "Console.h"
 
+bool console_active = false;
 Console console;
 
 extern "C" void console_print(const char* buffer)
 {
-	console.WriteString(buffer);
+	if (console_active)
+	{
+		console.WriteString(buffer);
+	}
+	else
+	{
+		printf("%s", buffer);
+	}
 }
 
 void Console::Setup(int w, int h, float dpiRatio, int sx, int sy, bool banked)
 {
+	console_active = true;
 	this->banked = banked;
 	charsAcross = sx;
 	charsDown = sy;

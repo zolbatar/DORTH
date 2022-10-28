@@ -26,6 +26,11 @@ void compiler_init()
 	init_jit("Daric");
 }
 
+static void dump_nativeword(clist_token_iter* t, const char* desc)
+{
+	printf("%d/%d/%d [%s]\n", t->ref->pushes, t->ref->pops, t->ref->sequence, desc);
+}
+
 static void dump_ir()
 {
 	c_foreach (t, clist_token, tokens)
@@ -33,80 +38,40 @@ static void dump_ir()
 		switch (t.ref->type)
 		{
 			case TOKEN_WORD:
-				printf("WORD: '%s'\n", t.ref->word);
+				printf("%d/%d/%d [WORD   ]: '%s'\n", t.ref->pushes, t.ref->pops, t.ref->sequence, t.ref->word);
 				break;
 			case TOKEN_PUSH_INTEGER:
-				printf("INTEGER: %d:%d\n", t.ref->v_i, t.ref->sequence);
+				printf("%d/%d/%d [INTEGER]: %d\n", t.ref->pushes, t.ref->pops, t.ref->sequence, t.ref->v_i);
 				break;
 			case TOKEN_PUSH_FLOAT:
-				printf("FLOAT: %f:%d\n", t.ref->v_f, t.ref->sequence);
+				printf("%d/%d/%d [FLOAT  ]: %f\n", t.ref->pushes, t.ref->pops, t.ref->sequence, t.ref->v_f);
 				break;
-			case TOKEN_INC_SP:
-				printf("INC SP: %d\n", t.ref->sequence);
+			case TOKEN_POP_R0:
+				printf("%d/%d/%d [POP R0 ]\n", t.ref->pushes, t.ref->pops, t.ref->sequence);
 				break;
-			case TOKEN_DEC_SP:
-				printf("DEC SP: %d\n", t.ref->sequence);
+			case TOKEN_POP_R1:
+				printf("%d/%d/%d [POP R1 ]\n", t.ref->pushes, t.ref->pops, t.ref->sequence);
 				break;
-			case TOKEN_POP_INT0:
-				printf("POP R0\n");
+			case TOKEN_PUSH_R0:
+				printf("%d/%d/%d [PUSH R0]\n", t.ref->pushes, t.ref->pops, t.ref->sequence);
 				break;
-			case TOKEN_POP_INT1:
-				printf("POP R1\n");
+			case TOKEN_INTEGER_TO_R0:
+				printf("%d/%d/%d [SET R0 ]: %d\n", t.ref->pushes, t.ref->pops, t.ref->sequence, t.ref->v_i);
 				break;
-			case TOKEN_PUSH_INT0:
-				printf("PUSH R0\n");
+			case TOKEN_INTEGER_TO_R1:
+				printf("%d/%d/%d [SET R1 ]: %d\n", t.ref->pushes, t.ref->pops, t.ref->sequence, t.ref->v_i);
 				break;
 			case TOKEN_CALLNATIVE:
-				printf("CALL %p\n", t.ref->native);
+				printf("%d/%d/%d [CALL   ]: %p\n", t.ref->pushes, t.ref->pops, t.ref->sequence, t.ref->native);
 				break;
 
 			case TOKEN_ADD:
-				printf("R0=R0+R1\n");
+				dump_nativeword(&t, "+      ");
+				break;
+			case TOKEN_SUBTRACT:
+				dump_nativeword(&t, "-      ");
 				break;
 		}
-	}
-}
-
-static void optimise()
-{
-	clist_token_value* prev = NULL;
-	c_foreach (t, clist_token, tokens)
-	{
-		if (prev != NULL && prev->type == t.ref->type)
-		{
-			t.ref->reset = true;
-		}
-		else
-		{
-			t.ref->reset = false;
-		}
-		switch (t.ref->type)
-		{
-			case TOKEN_WORD:
-			{
-				cmap_str_iter iter = cmap_str_find(&words, t.ref->word);
-				if (iter.ref == NULL)
-				{
-					printf("Word '%s' not found\n", t.ref->word);
-					return;
-				}
-				iter.ref->second.compile(&t);
-				break;
-			}
-			case TOKEN_PUSH_INTEGER:
-			case TOKEN_PUSH_FLOAT:
-			case TOKEN_INC_SP:
-			case TOKEN_DEC_SP:
-			case TOKEN_PUSH_INT0:
-			case TOKEN_POP_INT0:
-			case TOKEN_POP_INT1:
-				break;
-
-			case TOKEN_CALLNATIVE:
-			case TOKEN_ADD:
-				break;
-		}
-		prev = t.ref;
 	}
 }
 
@@ -159,6 +124,7 @@ void compile(const char* source)
 		process_word((const char*)&copy[start]);
 	}
 
+	expand();
 	optimise();
 	dump_ir();
 
@@ -172,6 +138,10 @@ void compile(const char* source)
 	// Compile, we should have optimised by now
 	c_foreach (t, clist_token, tokens)
 	{
+		// Decrement stack?
+		if (t.ref->pops > 0)
+			jit_subi(JIT_V0, JIT_V0, t.ref->pops * SS);
+
 		switch (t.ref->type)
 		{
 			case TOKEN_WORD:
@@ -188,20 +158,20 @@ void compile(const char* source)
 				jit_movi_d(JIT_F0, t.ref->v_f);
 				jit_stxi_d(t.ref->sequence * SS, JIT_V0, JIT_F0);
 				break;
-			case TOKEN_INC_SP:
-				jit_addi(JIT_V0, JIT_V0, t.ref->sequence * SS);
-				break;
-			case TOKEN_DEC_SP:
-				jit_subi(JIT_V0, JIT_V0, t.ref->sequence * SS);
-				break;
-			case TOKEN_PUSH_INT0:
+			case TOKEN_PUSH_R0:
 				jit_stxi(t.ref->sequence * SS, JIT_V0, JIT_R0);
 				break;
-			case TOKEN_POP_INT0:
+			case TOKEN_POP_R0:
 				jit_ldxi(JIT_R0, JIT_V0, t.ref->sequence * SS);
 				break;
-			case TOKEN_POP_INT1:
+			case TOKEN_POP_R1:
 				jit_ldxi(JIT_R1, JIT_V0, t.ref->sequence * SS);
+				break;
+			case TOKEN_INTEGER_TO_R0:
+				jit_movi(JIT_R0, t.ref->v_i);
+				break;
+			case TOKEN_INTEGER_TO_R1:
+				jit_movi(JIT_R1, t.ref->v_i);
 				break;
 
 			case TOKEN_CALLNATIVE:
@@ -212,10 +182,16 @@ void compile(const char* source)
 			case TOKEN_ADD:
 				jit_addr(JIT_R0, JIT_R0, JIT_R1);
 				break;
+			case TOKEN_SUBTRACT:
+				jit_subr(JIT_R0, JIT_R0, JIT_R1);
+				break;
 		}
-	}
 
-	save_stack_ptr();
+		// Increment stack?
+		if (t.ref->pushes > 0)
+			jit_addi(JIT_V0, JIT_V0, t.ref->pushes * SS);
+
+	}
 	jit_ret();
 	jit_epilog();
 
@@ -227,7 +203,7 @@ void compile(const char* source)
 		return;
 	}
 
-	jit_print();
+	//jit_print();
 
 	// Do compile
 	jit_word_t sz = _jit->code.length;
