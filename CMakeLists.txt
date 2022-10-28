@@ -22,8 +22,14 @@ conan_basic_setup()
 
 add_executable(DORTH
         main.cpp
+
         compiler/compiler.c
         compiler/compiler.h
+        compiler/stack.c
+        compiler/stack.h
+        compiler/native.c
+        compiler/disassemble.c
+        compiler/word.c
 
         lightning/lightning_orig.c
         lightning/jit_memory.c
@@ -59,7 +65,7 @@ add_executable(DORTH
         rich/console/Console.cpp
 
         ImGuiBindings/imgui_impl_opengl3.cpp
-        ImGuiBindings/imgui_impl_sdl.cpp compiler/stack.c compiler/stack.h compiler/native.c compiler/native.h)
+        ImGuiBindings/imgui_impl_sdl.cpp)
 target_link_libraries(${PROJECT_NAME} ${LIBS} ${CONAN_LIBS})
 #add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND xxd -i -n Dorth ${PROJECT_SOURCE_DIR}/Dorth > ${PROJECT_SOURCE_DIR}/Dorth.c)
 

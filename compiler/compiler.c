@@ -2,11 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "../lightning/lightning.h"
-#include "../lightning/jit_private.h"
-#include <capstone/capstone.h>
 #include "compiler.h"
 #include "stack.h"
+
+// 29 instructions, 5 stack ops
 
 #ifdef PITUBE
 #include "../tube/swis.h"
@@ -17,79 +16,68 @@ cmap_str words;
 clist_token tokens;
 uint8_t base = 10;
 jit_state_t* _jit;
-typedef int (* start)(void);
 
 void process_word(const char* word);
-
-static void setup_capstone()
-{
-#ifndef DISABLE_DISASM
-	// Setup capstone
-	cs_opt_mem setup;
-	setup.malloc = malloc;
-	setup.calloc = calloc;
-	setup.realloc = realloc;
-	setup.free = free;
-	setup.vsnprintf = vsnprintf;
-	cs_err err = cs_option(0, CS_OPT_MEM, (size_t)&setup);
-	if (err != CS_ERR_OK)
-	{
-		printf("Error (cs_option): %d\n", err);
-	}
-#endif
-}
-
-static void disassemble(start exec, jit_word_t sz)
-{
-#ifndef DISABLE_DISASM
-	// Disassemble
-	csh handle;
-	cs_insn* insn;
-	size_t count;
-#ifdef CAPSTONE_HAS_X86
-	printf("Disassembly architecture: X86\n");
-	cs_err err = cs_open(CS_ARCH_X86, CS_MODE_64, &handle);
-#else
-#ifdef PITUBE
-	printf("Disassembly architecture: ARM\n");
-	cs_err err = cs_open(CS_ARCH_ARM, CS_MODE_ARM, &handle);
-#else
-	printf("Disassembly architecture: AARCH64\n");
-	cs_err err = cs_open(CS_ARCH_ARM64, CS_MODE_ARM, &handle);
-#endif
-#endif
-	if (err != CS_ERR_OK)
-	{
-		printf("Disassemble error: %d\n", err);
-	}
-	cs_option(handle, CS_OPT_DETAIL, CS_OPT_ON);
-	count = cs_disasm(handle, (const unsigned char*)exec, sz, (size_t)_jit->code.ptr, 0, &insn);
-	printf("There are %u CPU instructions\n", count);
-	if (count > 0)
-	{
-		for (size_t j = 0; j < count; j++)
-		{
-#ifdef PITUBE
-			printf("0x%X:\t%s\t%s\n", (uint32_t)insn[j].address, insn[j].mnemonic, insn[j].op_str);
-#else
-			printf("0x%" PRIx64 ":\t%s\t%s\n", insn[j].address, insn[j].mnemonic, insn[j].op_str);
-#endif
-		}
-		cs_free(insn, count);
-	}
-	else
-	{
-		printf("ERROR: Failed to disassemble given code!");
-	}
-	cs_close(&handle);
-#endif
-}
 
 void compiler_init()
 {
 	native_init();
 	setup_capstone();
 	init_jit("Daric");
+}
+
+static void validate()
+{
+	// Validate
+	clist_token_value* prev = NULL;
+	c_foreach (t, clist_token, tokens)
+	{
+		if (prev != NULL && prev->type == t.ref->type)
+		{
+			t.ref->reset = true;
+		}
+		else
+		{
+			t.ref->reset = false;
+		}
+		switch (t.ref->type)
+		{
+			case TOKEN_WORD:
+			{
+				//printf("WORD: '%s'\n", t.ref->word);
+				cmap_str_iter iter = cmap_str_find(&words, t.ref->word);
+				if (iter.ref == NULL)
+				{
+					printf("Word '%s' not found\n", t.ref->word);
+					return;
+				}
+				break;
+			}
+			case TOKEN_INTEGER:
+				if (prev != NULL && prev->type == TOKEN_INTEGER)
+				{
+					if (prev->sequence == 0)
+					{
+						prev->sequence = 1;
+					}
+					t.ref->sequence = prev->sequence + 1;
+				}
+				printf("INTEGER: %d:%d\n", t.ref->v_i, t.ref->sequence);
+				break;
+			case TOKEN_FLOAT:
+				if (prev != NULL && prev->type == TOKEN_FLOAT)
+				{
+					if (prev->sequence == 0)
+					{
+						prev->sequence = 1;
+					}
+					t.ref->sequence = prev->sequence + 1;
+				}
+				printf("FLOAT: %f:%d\n", t.ref->v_f, t.ref->sequence);
+				break;
+		}
+		prev = t.ref;
+	}
 }
 
 void compile(const char* source)
@@ -141,30 +129,7 @@ void compile(const char* source)
 		process_word((const char*)&copy[start]);
 	}
 
-	// Validate
-	c_foreach (t, clist_token, tokens)
-	{
-		switch (t.ref->type)
-		{
-			case TOKEN_WORD:
-			{
-				//printf("WORD: '%s'\n", t.ref->word);
-				cmap_str_iter iter = cmap_str_find(&words, t.ref->word);
-				if (iter.ref == NULL)
-				{
-					printf("Word '%s' not found\n", t.ref->word);
-					return;
-				}
-				break;
-			}
-			case TOKEN_INTEGER:
-				//printf("INTEGER: %d\n", t.ref->v_i);
-				break;
-			case TOKEN_FLOAT:
-				//printf("FLOAT: %f\n", t.ref->v_f);
-				break;
-		}
-	}
+	validate();
 
 	// Now let's compile it
 	_jit = jit_new_state();
@@ -187,7 +152,15 @@ void compile(const char* source)
 			}
 			case TOKEN_INTEGER:
 				jit_movi(JIT_R0, t.ref->v_i);
-				stack_push_int(JIT_R0);
+				if (t.ref->sequence == 0)
+				{
+					stack_push_int(JIT_R0);
+				}
+				else
+				{
+					stack_push_int(JIT_R0);
+//					jit_stxr(JIT_V0, (t.ref->sequence - 1) * sizeof(size_t), JIT_R0);
+				}
 				break;
 			case TOKEN_FLOAT:
 				jit_movi_d(JIT_F0, t.ref->v_f);
@@ -246,97 +219,5 @@ void compile(const char* source)
 	free(code);
 #endif
 	finish_jit();
-	return;
-}
-
-void process_word(const char* word)
-{
-	size_t l = strlen(word);
-	char* end;
-
-	// Decimal
-	if (word[0] == '#')
-	{
-		long i = strtol(&word[1], &end, 10);
-		if (end != word)
-		{
-			token t;
-			t.type = TOKEN_INTEGER;
-			t.v_i = i;
-			clist_token_push_back(&tokens, t);
-			return;
-		}
-		else
-		{
-			printf("Error parsing integer literal\n");
-		}
-	}
-
-	// Hexadecimal
-	if (word[0] == '$')
-	{
-		long i = strtol(&word[1], &end, 16);
-		if (end != word)
-		{
-			token t;
-			t.type = TOKEN_INTEGER;
-			t.v_i = i;
-			clist_token_push_back(&tokens, t);
-			return;
-		}
-		else
-		{
-			printf("Error parsing integer literal\n");
-		}
-	}
-
-	// Binary
-	if (word[0] == '%')
-	{
-		long i = strtol(&word[1], &end, 2);
-		if (end != word)
-		{
-			token t;
-			t.type = TOKEN_INTEGER;
-			t.v_i = i;
-			clist_token_push_back(&tokens, t);
-			return;
-		}
-		else
-		{
-			printf("Error parsing integer literal\n");
-		}
-	}
-
-	// Float?
-	if (strstr(word, "."))
-	{
-		double d = strtod(word, &end);
-		if (end != word)
-		{
-			token t;
-			t.type = TOKEN_FLOAT;
-			t.v_f = d;
-			clist_token_push_back(&tokens, t);
-			return;
-		}
-	}
-
-	// Base?
-	long i = strtol(word, &end, base);
-	if (end != word)
-	{
-		token t;
-		t.type = TOKEN_INTEGER;
-		t.v_i = i;
-		clist_token_push_back(&tokens, t);
-		return;
-	}
-
-	// Gotta be a word!
-	token t;
-	t.type = TOKEN_WORD;
-	t.word = word;
-	clist_token_push_back(&tokens, t);
 	return;
 }

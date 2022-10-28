@@ -1,12 +1,21 @@
 #ifndef _COMPILER_H_
 #define _COMPILER_H_
 
+#include <stdbool.h>
+#include "../lightning/lightning.h"
+#include "../lightning/jit_private.h"
+#include <capstone/capstone.h>
+
+typedef int (* start)(void);
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 void compiler_init();
 void compile(const char* source);
+void setup_capstone();
+void disassemble(start exec, jit_word_t sz);
 
 #ifdef __cplusplus
 }
@@ -22,6 +31,8 @@ typedef enum
 typedef struct
 {
 	token_type type;
+	unsigned sequence;
+	bool reset;
 	union
 	{
 		const char* word;
@@ -40,8 +51,8 @@ static int token_cmp(const token* a, const token* b)
 
 typedef struct
 {
-	void (*compile)(void);
-	void (*interpret)(void);
+	void (* compile)(void);
+	void (* interpret)(void);
 } word;
 
 #include "../stc/cstr.h"
