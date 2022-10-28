@@ -158,8 +158,11 @@ void compile(const char* source)
 				}
 				else
 				{
-					stack_push_int(JIT_R0);
-//					jit_stxr(JIT_V0, (t.ref->sequence - 1) * sizeof(size_t), JIT_R0);
+					jit_stxi((t.ref->sequence - 1) * sizeof(size_t), JIT_V0, JIT_R0);
+				}
+				if (t.ref->reset)
+				{
+					jit_addi(JIT_V0, JIT_V0, sizeof(size_t) * t.ref->sequence);
 				}
 				break;
 			case TOKEN_FLOAT:
@@ -169,6 +172,7 @@ void compile(const char* source)
 		}
 	}
 
+	save_stack_ptr();
 	jit_ret();
 	jit_epilog();
 

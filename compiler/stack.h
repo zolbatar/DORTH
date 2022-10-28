@@ -2,6 +2,7 @@
 #define _STACK_H_
 
 void stack_init();
+void save_stack_ptr();
 void stack_push_int(int reg);
 void stack_pop_int(int reg);
 void stack_push_float(int reg);
