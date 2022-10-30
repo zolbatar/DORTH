@@ -11,31 +11,31 @@ extern "C" void __DOT(int i)
 
 static void DOT(std::list<Token>& tokens, std::list<Token>::const_iterator t, CompilerLLVM& llvm)
 {
-	tokens.insert(t, Token{ TokenType::POP_R0, 0, 1, 0 });
-	tokens.insert(t, Token{ TokenType::CALLNATIVE, 0, 0, 0,
+	tokens.insert(t, Token{ TokenType::POP_R0 });
+	tokens.insert(t, Token{ TokenType::CALLNATIVE,
 		.native = llvm.Module->getFunction("__DOT"),
 		.word="__DOT" });
 }
 
 static void MINUS(std::list<Token>& tokens, std::list<Token>::const_iterator t, CompilerLLVM& llvm)
 {
-	tokens.insert(t, Token{ TokenType::POP_R1, 0, 1, 0 });
-	tokens.insert(t, Token{ TokenType::POP_R0, 0, 1, 0 });
+	tokens.insert(t, Token{ TokenType::POP_R1 });
+	tokens.insert(t, Token{ TokenType::POP_R0 });
 	tokens.insert(t, Token{ TokenType::SUBTRACT });
-	tokens.insert(t, Token{ TokenType::PUSH_R0, 0, 0, 1 });
+	tokens.insert(t, Token{ TokenType::PUSH_R0 });
 }
 
 static void PLUS(std::list<Token>& tokens, std::list<Token>::const_iterator t, CompilerLLVM& llvm)
 {
-	tokens.insert(t, Token{ TokenType::POP_R1, 0, 1, 0 });
-	tokens.insert(t, Token{ TokenType::POP_R0, 0, 1, 0 });
+	tokens.insert(t, Token{ TokenType::POP_R1 });
+	tokens.insert(t, Token{ TokenType::POP_R0 });
 	tokens.insert(t, Token{ TokenType::ADD });
-	tokens.insert(t, Token{ TokenType::PUSH_R0, 0, 0, 1 });
+	tokens.insert(t, Token{ TokenType::PUSH_R0 });
 }
 
 static void DROP(std::list<Token>& tokens, std::list<Token>::const_iterator t, CompilerLLVM& llvm)
 {
-	tokens.insert(t, Token{ TokenType::POP_R0, 0, 1, 0 });
+	tokens.insert(t, Token{ TokenType::POP_R0 });
 }
 
 void Compiler::NativeInit(CompilerLLVM& llvm)

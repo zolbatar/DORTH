@@ -7,8 +7,7 @@ int main()
 	Compiler compiler;
 //	UISDL ui(compiler);
 	//ui.Start();
-	compiler.Compile("100 250 + .");
-//	compiler.Compile("200 DROP 100 250 + . 100 250 - . 123 .");
+	compiler.Compile("200 DROP 100 250 + . 100 250 - . 123 .");
 	compiler.Run();
 	return 0;
 }

@@ -27,7 +27,10 @@
     <list default="true" id="c0d653c8-2103-43bf-be30-0cc166b39cb5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Compiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JIT/JIT.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/JIT/JIT.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/DumpIR.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/DumpIR.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/Native.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Native.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/Tokens.h" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Tokens.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/Word.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Word.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LLVM/CompilerLLVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LLVM/CompilerLLVM.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LLVM/CompilerLLVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/LLVM/CompilerLLVM.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Out.ll" beforeDir="false" afterPath="$PROJECT_DIR$/Out.ll" afterDir="false" />
@@ -141,7 +144,7 @@
       <workItem from="1666735859993" duration="10921000" />
       <workItem from="1666810171001" duration="1273000" />
       <workItem from="1666946370283" duration="5708000" />
-      <workItem from="1667080471623" duration="12080000" />
+      <workItem from="1667080471623" duration="13501000" />
     </task>
     <servers />
   </component>

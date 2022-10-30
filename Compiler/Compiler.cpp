@@ -4,7 +4,7 @@
 
 Compiler::Compiler()
 {
-	llvm.SetupProfile(false, false, "Dorth", StackSize);
+	llvm.SetupProfile(true, false, "Dorth", StackSize);
 	NativeInit(llvm);
 }
 
@@ -60,30 +60,29 @@ void Compiler::Compile(std::string code)
 
 void Compiler::CompileToken(Token& t)
 {
-	// Decrement stack?
-	if (t.pops > 0)
-	{
-		llvm.DecStack();
-	}
-
 	switch (t.type)
 	{
 		case TokenType::WORD:
 			assert(0);
 		case TokenType::PUSH_INTEGER:
 			llvm.IR()->CreateStore(llvm::ConstantInt::get(llvm.TypeInt, t.v_i), llvm.StackLoc());
+			llvm.IncStack();
 			break;
 		case TokenType::PUSH_FLOAT:
 			llvm.IR()->CreateStore(llvm::ConstantFP::get(llvm.TypeFloat, t.v_f), llvm.StackLoc());
-			break;
-		case TokenType::POP_R0:
-			llvm.IR()->CreateStore(llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc()), llvm.R0());
-			break;
-		case TokenType::POP_R1:
-			llvm.IR()->CreateStore(llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc()), llvm.R1());
+			llvm.IncStack();
 			break;
 		case TokenType::PUSH_R0:
 			llvm.IR()->CreateStore(llvm.GetR0(), llvm.StackLoc());
+			llvm.IncStack();
+			break;
+		case TokenType::POP_R0:
+			llvm.DecStack();
+			llvm.IR()->CreateStore(llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc()), llvm.R0());
+			break;
+		case TokenType::POP_R1:
+			llvm.DecStack();
+			llvm.IR()->CreateStore(llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc()), llvm.R1());
 			break;
 
 		case TokenType::CALLNATIVE:
@@ -95,12 +94,6 @@ void Compiler::CompileToken(Token& t)
 		case TokenType::SUBTRACT:
 			llvm.IR()->CreateStore(llvm.IR()->CreateSub(llvm.GetR0(), llvm.GetR1()), llvm.R0());
 			break;
-	}
-
-	// Increment stack?
-	if (t.pushes > 0)
-	{
-		llvm.IncStack();
 	}
 }
 

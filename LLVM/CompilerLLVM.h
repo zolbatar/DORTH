@@ -40,6 +40,11 @@ class CompilerLLVM
 		return globals["~SP"];
 	}
 
+	llvm::Value* GetSP()
+	{
+		return IR()->CreateLoad(TypeInt, globals["~SP"]);
+	}
+
 	llvm::GlobalVariable* Stack()
 	{
 		return globals["~Stack"];

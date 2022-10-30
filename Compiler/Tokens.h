@@ -19,9 +19,6 @@ enum class TokenType
 struct Token
 {
 	TokenType type;
-	uint8_t sequence;
-	uint8_t pops;
-	uint8_t pushes;
 	std::string word;
 	llvm::FunctionCallee native;
 	int64_t v_i;

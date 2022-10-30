@@ -11,7 +11,7 @@ void Compiler::ProcessWord(std::string word)
 		long i = strtol(&word[1], &end, 10);
 		if (end != word)
 		{
-			tokens.emplace_back(Token{ TokenType::PUSH_INTEGER, 0, 0, 1, .v_i = i });
+			tokens.emplace_back(Token{ TokenType::PUSH_INTEGER, .v_i = i });
 			return;
 		}
 		else
@@ -26,7 +26,7 @@ void Compiler::ProcessWord(std::string word)
 		long i = strtol(&word[1], &end, 16);
 		if (end != word)
 		{
-			tokens.emplace_back(Token{ TokenType::PUSH_INTEGER, 0, 0, 1, .v_i = i });
+			tokens.emplace_back(Token{ TokenType::PUSH_INTEGER, .v_i = i });
 			return;
 		}
 		else
@@ -41,7 +41,7 @@ void Compiler::ProcessWord(std::string word)
 		long i = strtol(&word[1], &end, 2);
 		if (end != word)
 		{
-			tokens.emplace_back(Token{ TokenType::PUSH_INTEGER, 0, 0, 1, .v_i = i });
+			tokens.emplace_back(Token{ TokenType::PUSH_INTEGER, .v_i = i });
 			return;
 		}
 		else
@@ -56,7 +56,7 @@ void Compiler::ProcessWord(std::string word)
 		double d = std::strtod(word.c_str(), &end);
 		if (end != word)
 		{
-			tokens.emplace_back(Token{ TokenType::PUSH_FLOAT, 0, 0, 1, .v_f = d });
+			tokens.emplace_back(Token{ TokenType::PUSH_FLOAT, .v_f = d });
 			return;
 		}
 	}
@@ -65,11 +65,11 @@ void Compiler::ProcessWord(std::string word)
 	long i = std::strtol(word.c_str(), &end, base);
 	if (end != word)
 	{
-		tokens.emplace_back(Token{ TokenType::PUSH_INTEGER, 0, 0, 1, .v_i = i });
+		tokens.emplace_back(Token{ TokenType::PUSH_INTEGER, .v_i = i });
 		return;
 	}
 
 	// Gotta be a word!
-	tokens.emplace_back(Token{ TokenType::WORD, 0, 0, 1, .word = word });
+	tokens.emplace_back(Token{ TokenType::WORD, .word = word });
 	return;
 }
