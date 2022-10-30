@@ -34,13 +34,6 @@ void JIT::Run(CompilerLLVM* llvm)
 		.addGenerator(std::move(llvm::orc::DynamicLibrarySearchGenerator::GetForCurrentProcess(dl.getGlobalPrefix())
 			.get()));
 
-	//llvm::raw_ostream &output = llvm::outs();
-//	std::string str;
-//	llvm::raw_string_ostream output(str);
-	//JIT->getExecutionSession().dump(output);
-	//llvm::orc::JITDylib().dump();
-	//llvm::orc::JITDylib().dump(output);
-
 	// Try and find the Implicit function, if fails then compilation likely failed
 	try
 	{

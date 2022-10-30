@@ -267,15 +267,15 @@ llvm::IRBuilder<>* CompilerLLVM::CreateBuilder(std::string name, llvm::Function*
 	return builder;
 }
 
-void CompilerLLVM::IncStack(size_t v)
+void CompilerLLVM::IncStack()
 {
-	auto new_value = IR()->CreateAdd(SP(), llvm::ConstantInt::get(TypeInt, v));
+	auto new_value = IR()->CreateAdd(SP(), llvm::ConstantInt::get(TypeInt, 1));
 	IR()->CreateStore(new_value, SP());
 }
 
-void CompilerLLVM::DecStack(size_t v)
+void CompilerLLVM::DecStack()
 {
-	auto new_value = IR()->CreateSub(SP(), llvm::ConstantInt::get(TypeInt, v));
+	auto new_value = IR()->CreateSub(SP(), llvm::ConstantInt::get(TypeInt, 1));
 	IR()->CreateStore(new_value, SP());
 }
 

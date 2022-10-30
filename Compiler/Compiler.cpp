@@ -4,7 +4,7 @@
 
 Compiler::Compiler()
 {
-	llvm.SetupProfile(true, false, "Dorth", StackSize);
+	llvm.SetupProfile(false, false, "Dorth", StackSize);
 	NativeInit(llvm);
 }
 
@@ -20,7 +20,6 @@ void Compiler::Compile(std::string code)
 	// Process one token at a time
 	int start = -1;
 	int last_end = 0;
-	int end = 0;
 	for (int i = 0; i < code.length(); i++)
 	{
 		char c = code[i];
@@ -29,10 +28,9 @@ void Compiler::Compile(std::string code)
 			// Previous word?
 			if (start != -1)
 			{
-				end = i;
-				auto ss = code.substr(start, end - start);
+				auto ss = code.substr(start, i - start);
 				ProcessWord(ss);
-				last_end = end;
+				last_end = i;
 				start = -1;
 			}
 		}
@@ -46,7 +44,7 @@ void Compiler::Compile(std::string code)
 	// Did we process the last word?
 	if (last_end != code.length() && start != -1)
 	{
-		auto ss = code.substr(start, end - start);
+		auto ss = code.substr(start, code.length() - start);
 		ProcessWord(ss);
 	}
 
@@ -65,7 +63,7 @@ void Compiler::CompileToken(Token& t)
 	// Decrement stack?
 	if (t.pops > 0)
 	{
-//		llvm.DecStack(t.pops);
+		llvm.DecStack();
 	}
 
 	switch (t.type)
@@ -102,7 +100,7 @@ void Compiler::CompileToken(Token& t)
 	// Increment stack?
 	if (t.pushes > 0)
 	{
-//		llvm.IncStack(t.pops);
+		llvm.IncStack();
 	}
 }
 

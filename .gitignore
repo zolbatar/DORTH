@@ -8,3 +8,4 @@ CMakeFiles/
 .idea/workspace.xml
 *.o
 Dorth
+*.ll

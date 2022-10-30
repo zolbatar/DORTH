@@ -47,7 +47,7 @@ class CompilerLLVM
 
 	llvm::Value* StackLoc()
 	{
-		return IR()->CreateGEP(Stack()->getValueType(), Stack(), { llvm::ConstantInt::get(TypeInt, 0), IR()->CreateLoad(TypeInt, SP()) });
+		return IR()->CreateGEP(Stack()->getValueType(), Stack(), { IR()->CreateLoad(TypeInt, SP()) });
 	}
 
 	llvm::GlobalVariable* R0()
@@ -70,8 +70,8 @@ class CompilerLLVM
 		return IR()->CreateLoad(TypeInt, R1());
 	}
 
-	void IncStack(size_t v);
-	void DecStack(size_t v);
+	void IncStack();
+	void DecStack();
  private:
 	void AddOptPasses(llvm::legacy::PassManagerBase& passes, llvm::legacy::FunctionPassManager& fnPasses);
 	void OptimiseModule();

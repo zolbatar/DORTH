@@ -25,25 +25,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0d653c8-2103-43bf-be30-0cc166b39cb5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Compiler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Compiler/Disassembler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LLVM/Disassembler.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Compiler/Native.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Native.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Compiler/Tokens.h" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Tokens.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Compiler/Words.h" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Words.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/UISDL.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UISDL.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI/UISDL.h" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UISDL.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_Compiler/compiler.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_Compiler/compiler.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_Compiler/disassemble.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_Compiler/native.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_Compiler/optimiser.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_Compiler/stack.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_Compiler/stack.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/_Compiler/word.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JIT/JIT.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/JIT/JIT.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LLVM/CompilerLLVM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LLVM/CompilerLLVM.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LLVM/CompilerLLVM.h" beforeDir="false" afterPath="$PROJECT_DIR$/LLVM/CompilerLLVM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Out.ll" beforeDir="false" afterPath="$PROJECT_DIR$/Out.ll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OutOptimised.ll" beforeDir="false" afterPath="$PROJECT_DIR$/OutOptimised.ll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -153,7 +141,7 @@
       <workItem from="1666735859993" duration="10921000" />
       <workItem from="1666810171001" duration="1273000" />
       <workItem from="1666946370283" duration="5708000" />
-      <workItem from="1667080471623" duration="9278000" />
+      <workItem from="1667080471623" duration="12080000" />
     </task>
     <servers />
   </component>
@@ -205,6 +193,11 @@
           <url>file://$PROJECT_DIR$/Compiler/Native.cpp</url>
           <line>6</line>
           <option name="timeStamp" value="70" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Compiler/Expand.cpp</url>
+          <line>13</line>
+          <option name="timeStamp" value="78" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
