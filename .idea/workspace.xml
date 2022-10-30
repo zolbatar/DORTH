@@ -11,7 +11,10 @@
   </component>
   <component name="CMakeRunConfigurationManager">
     <generated>
+      <config projectName="DORTH" targetName="acc_gen" />
+      <config projectName="DORTH" targetName="intrinsics_gen" />
       <config projectName="DORTH" targetName="DORTH" />
+      <config projectName="DORTH" targetName="omp_gen" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -22,132 +25,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c0d653c8-2103-43bf-be30-0cc166b39cb5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dorth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/bagiCode.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/beebCode.asm" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/beebCode.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/beebScreen.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/beebScreen.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/beebScreenSDL.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/beebasm.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/extraCode.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/mkAsm.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/mkasm.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/beebScreen/os.inc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/compiler/compiler.c" beforeDir="false" afterPath="$PROJECT_DIR$/_Compiler/compiler.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compiler/compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/_Compiler/compiler.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compiler/disassemble.c" beforeDir="false" afterPath="$PROJECT_DIR$/_Compiler/disassemble.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compiler/native.c" beforeDir="false" afterPath="$PROJECT_DIR$/_Compiler/native.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compiler/optimiser.c" beforeDir="false" afterPath="$PROJECT_DIR$/_Compiler/optimiser.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compiler/stack.c" beforeDir="false" afterPath="$PROJECT_DIR$/_Compiler/stack.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compiler/stack.h" beforeDir="false" afterPath="$PROJECT_DIR$/_Compiler/stack.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/compiler/word.c" beforeDir="false" afterPath="$PROJECT_DIR$/_Compiler/word.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/imgui.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_aarch64-cpu.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_aarch64-fpu.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_aarch64-sz.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_aarch64.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_aarch64.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_arm-cpu.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_arm-swf.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_arm-sz.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_arm-vfp.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_arm.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_arm.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_disasm.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_disasm.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_memory.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_memory.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_names.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_note.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_note.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_print.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_print.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_private.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_rewind.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_size.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_size.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_x86-cpu.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_x86-sse.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_x86-sz.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_x86-x87.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_x86.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/jit_x86.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/lightning.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/lightning.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/lightning.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/lightning_orig.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lightning/sysconfig.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/Compiler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Compiler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/Compiler.h" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Compiler.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/Disassembler.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/LLVM/Disassembler.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/Native.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Native.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/Tokens.h" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Tokens.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compiler/Words.h" beforeDir="false" afterPath="$PROJECT_DIR$/Compiler/Words.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UISDL.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UISDL.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UI/UISDL.h" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UISDL.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Compiler/compiler.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Compiler/compiler.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Compiler/disassemble.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Compiler/native.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Compiler/optimiser.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Compiler/stack.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Compiler/stack.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/_Compiler/word.c" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/bbckeycodes.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/console/console.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/console/console.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fb.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fb.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fonts/bitmap_fonts.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fonts/def/font_ibm.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fonts/def/fontpzim3x5.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fonts/def/fontsmall.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fonts/font.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fonts/font.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fonts/stb_truetype.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/fonts/ttf_fonts.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/keyboard.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pitube/prompt.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/prompt.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/UI/Lodepng.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/UI/Lodepng.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/UI/Lodepng.h" beforeDir="false" afterPath="$PROJECT_DIR$/UI/Lodepng.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/UI/UISDL.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UISDL.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/UI/UISDL.h" beforeDir="false" afterPath="$PROJECT_DIR$/UI/UISDL.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/UI/stb_image.h" beforeDir="false" afterPath="$PROJECT_DIR$/UI/stb_image.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/console/Console.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Console/Console.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/console/Console.h" beforeDir="false" afterPath="$PROJECT_DIR$/Console/Console.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/keyboard.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/keyboard.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rich/prompt.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/carc.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/carr2.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/carr3.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cbits.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cbox.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/ccommon.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cdeq.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/clist.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cmap.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/coption.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cpque.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cqueue.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/crandom.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cregex.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cset.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/csmap.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/csset.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cstack.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cstr.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/csview.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/cvec.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/forward.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/stctest.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/template.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stc/utf8.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/arm-start.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/armc-start.S" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/armcopro.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/armtubeio.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/armtubeswis.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/base.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/kernel.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/rpi-base.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/rpi.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/rpi.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/rpi.x" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/swis.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/tube-defs.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tube/tube-env.h" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,45 +73,66 @@
     <option name="showExcludedFiles" value="false" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/daryl/GitHub/Personal/DORTH&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C/C++&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "last_opened_file_path": "/Users/daryl/GitHub/DORTH",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C/C++"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/Library" />
+      <recent name="$PROJECT_DIR$/LLVM" />
       <recent name="$PROJECT_DIR$/rich/console" />
       <recent name="$PROJECT_DIR$/rich" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/rich/sdl" />
-      <recent name="$PROJECT_DIR$/pitube/fonts" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/LLVM" />
+      <recent name="$PROJECT_DIR$/JIT" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/rich/UI" />
       <recent name="$PROJECT_DIR$/rich" />
-      <recent name="$PROJECT_DIR$/pitube" />
-      <recent name="$PROJECT_DIR$/pitube/fonts/def" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="CMake Application.DORTH">
     <configuration name="DORTH" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DORTH" TARGET_NAME="DORTH" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="DORTH" RUN_TARGET_NAME="DORTH">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="acc_gen" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DORTH" TARGET_NAME="acc_gen" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="intrinsics_gen" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DORTH" TARGET_NAME="intrinsics_gen" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="omp_gen" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="DORTH" TARGET_NAME="omp_gen" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.acc_gen" />
+      <item itemvalue="CMake Application.DORTH" />
+      <item itemvalue="CMake Application.intrinsics_gen" />
+      <item itemvalue="CMake Application.omp_gen" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -235,6 +153,7 @@
       <workItem from="1666735859993" duration="10921000" />
       <workItem from="1666810171001" duration="1273000" />
       <workItem from="1666946370283" duration="5708000" />
+      <workItem from="1667080471623" duration="9278000" />
     </task>
     <servers />
   </component>
@@ -271,6 +190,21 @@
           <url>file://$PROJECT_DIR$/_Compiler/optimiser.c</url>
           <line>103</line>
           <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/_Compiler/disassemble.c</url>
+          <line>43</line>
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/LLVM/Disassembler.cpp</url>
+          <line>34</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Compiler/Native.cpp</url>
+          <line>6</line>
+          <option name="timeStamp" value="70" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

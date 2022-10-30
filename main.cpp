@@ -2,11 +2,13 @@
 #include "UI/UISDL.h"
 #include "Compiler/Compiler.h"
 
-Compiler compiler;
-
 int main()
 {
-//	ui.Start();
-	compiler.Compile("200 DROP 100 250 + . 100 250 - . 123 .");
+	Compiler compiler;
+//	UISDL ui(compiler);
+	//ui.Start();
+	//compiler.Compile("200 DROP 100 250 + . 100 250 - . 123 .");
+	compiler.Compile("200 200 + .");
+	compiler.Run();
 	return 0;
 }

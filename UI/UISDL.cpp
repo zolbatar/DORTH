@@ -14,9 +14,9 @@
 
 size_t frame_count = 0;
 extern Console console;
-extern Compiler compiler;
 
-UISDL::UISDL()
+UISDL::UISDL(Compiler& compiler)
+	: compiler(compiler)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{

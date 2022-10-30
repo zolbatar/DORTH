@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include "../LLVM/CompilerLLVM.h"
 
 enum class TokenType
 {
@@ -11,10 +12,6 @@ enum class TokenType
 	WORD,
 	CALLNATIVE,
 
-	// Optimised tokens
-	INTEGER_TO_R0,
-	INTEGER_TO_R1,
-
 	ADD,
 	SUBTRACT,
 };
@@ -25,11 +22,8 @@ struct Token
 	uint8_t sequence;
 	uint8_t pops;
 	uint8_t pushes;
-	union
-	{
-		const char* word;
-		void* native;
-		int v_i;
-		double v_f;
-	};
+	std::string word;
+	llvm::FunctionCallee native;
+	int64_t v_i;
+	double v_f;
 };

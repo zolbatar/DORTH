@@ -7,10 +7,30 @@ EXECUTE_PROCESS(COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE
 message(STATUS "Architecture: ${ARCHITECTURE}")
 set(CMAKE_OSX_ARCHITECTURES ${ARCHITECTURE})
 include_directories(${CMAKE_SOURCE_DIR}/Capstone/include)
-add_compile_options(-DHAVE_FFSL -DCapstone_HAS_X86 -DCapstone_HAS_ARM64)
+
+if (NOT (APPLE AND ${ARCHITECTURE} STREQUAL "arm64"))
+    add_compile_options(-DSDL -DHAVE_FFSL -DCAPSTONE_HAS_X86)
+else ()
+    add_compile_options(-DSDL -DHAVE_FFSL -DCAPSTONE_HAS_ARM64)
+endif ()
 
 include(${CMAKE_SOURCE_DIR}/cmake-build-${CMAKE_BUILD_TYPE}/conanbuildinfo.cmake)
 conan_basic_setup()
+
+# LLVM
+if (${ARCHITECTURE} STREQUAL "arm64")
+    set(CORE_LLVM_DIR /opt/homebrew/Cellar/llvm/15.0.2/)
+else ()
+    set(CORE_LLVM_DIR /usr/local/Cellar/llvm/15.0.2/)
+endif ()
+set(LLVM_DIR "${CORE_LLVM_DIR}lib/cmake/llvm")
+find_package(LLVM REQUIRED CONFIG)
+message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+include_directories(${LLVM_INCLUDE_DIRS})
+separate_arguments(LLVM_DEFINITIONS_LIST NATIVE_COMMAND ${LLVM_DEFINITIONS})
+add_definitions(${LLVM_DEFINITIONS_LIST})
+llvm_map_components_to_libnames(LLVM_LIBS core support WebAssembly AArch64 X86 Coroutines OrcJIT)
 
 add_executable(DORTH
         main.cpp
@@ -18,8 +38,22 @@ add_executable(DORTH
         Compiler/Compiler.cpp
         Compiler/Compiler.h
         Compiler/Tokens.h
+        Compiler/Words.h
         Compiler/Native.cpp
-        Compiler/Disassembler.cpp
+        LLVM/Disassembler.cpp
+        Compiler/Expand.cpp
+        Compiler/DumpIR.cpp
+        Compiler/Word.cpp
+
+        LLVM/CompilerLLVM.cpp
+        LLVM/CompilerLLVM.h
+        LLVM/Run.cpp
+
+        JIT/JIT.cpp
+        JIT/JIT.h
+
+        Library/StringLib.cpp
+        Library/StringLib.h
 
         Capstone/arch/X86/X86Disassembler.c
         Capstone/arch/X86/X86IntelInstPrinter.c
@@ -48,8 +82,8 @@ add_executable(DORTH
         ImGuiBindings/imgui_impl_sdl.cpp
 
         Runtime/Console.cpp
-        Runtime/Runtime.cpp Compiler/Words.h Runtime/Runtime.h)
-target_link_libraries(${PROJECT_NAME} ${LIBS} ${CONAN_LIBS})
+        Runtime/Runtime.cpp Runtime/Runtime.h)
+target_link_libraries(${PROJECT_NAME} ${LIBS} ${CONAN_LIBS} ${LLVM_LIBS})
 
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
 foreach (dir ${dirs})

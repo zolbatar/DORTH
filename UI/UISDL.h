@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include "../Compiler/Compiler.h"
 
 #ifdef WINDOWS
 #define GL_GLEXT_PROTOTYPES 1
@@ -29,7 +30,7 @@ enum class Mode
 class UISDL
 {
  public:
-	UISDL();
+	UISDL(Compiler& compiler);
 	~UISDL();
 
 	void Start();
@@ -82,6 +83,7 @@ class UISDL
 	void _CreateWindow();
 	bool LoadTextureFromFile(const char* filename, GLuint* outTexture, int* outWidth, int* outHeight);
 
+	Compiler& compiler;
 	const float font_size = 20.0f;
 	const int console_x_size = 12;
 	const int console_y_size = 24;
