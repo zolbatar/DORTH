@@ -21,6 +21,7 @@ struct Token
 	TokenType type;
 	std::string word;
 	llvm::FunctionCallee native;
+	void (* interpret)(CompilerLLVM& llvm);
 	int64_t v_i;
 	double v_f;
 };

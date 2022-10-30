@@ -20,6 +20,7 @@ class Compiler
 
  private:
 	void Expand();
+	void ExpandToken(std::list<Token>::iterator t);
 	void DumpIR();
 	void NativeInit(CompilerLLVM& llvm);
 	void ProcessWord(std::string word);

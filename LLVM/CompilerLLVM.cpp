@@ -283,3 +283,48 @@ void CompilerLLVM::FinishFunc()
 {
 	IR()->CreateRetVoid();
 }
+
+llvm::IRBuilder<>* CompilerLLVM::IR()
+{
+	return ir;
+}
+
+llvm::GlobalVariable* CompilerLLVM::SP()
+{
+	return globals["~SP"];
+}
+
+llvm::Value* CompilerLLVM::GetSP()
+{
+	return IR()->CreateLoad(TypeInt, globals["~SP"]);
+}
+
+llvm::GlobalVariable* CompilerLLVM::Stack()
+{
+	return globals["~Stack"];
+}
+
+llvm::Value* CompilerLLVM::StackLoc()
+{
+	return IR()->CreateGEP(Stack()->getValueType(), Stack(), { IR()->CreateLoad(TypeInt, SP()) });
+}
+
+llvm::GlobalVariable* CompilerLLVM::R0()
+{
+	return globals["~R0"];
+}
+
+llvm::Value* CompilerLLVM::GetR0()
+{
+	return IR()->CreateLoad(TypeInt, R0());
+}
+
+llvm::GlobalVariable* CompilerLLVM::R1()
+{
+	return globals["~R1"];
+}
+
+llvm::Value* CompilerLLVM::GetR1()
+{
+	return IR()->CreateLoad(TypeInt, R1());
+}

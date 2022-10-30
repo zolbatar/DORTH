@@ -30,51 +30,15 @@ class CompilerLLVM
 	llvm::Type* TypeFloat = nullptr;
 	std::unique_ptr<llvm::Module> Module = nullptr;
 
-	llvm::IRBuilder<>* IR()
-	{
-		return ir;
-	}
-
-	llvm::GlobalVariable* SP()
-	{
-		return globals["~SP"];
-	}
-
-	llvm::Value* GetSP()
-	{
-		return IR()->CreateLoad(TypeInt, globals["~SP"]);
-	}
-
-	llvm::GlobalVariable* Stack()
-	{
-		return globals["~Stack"];
-	}
-
-	llvm::Value* StackLoc()
-	{
-		return IR()->CreateGEP(Stack()->getValueType(), Stack(), { IR()->CreateLoad(TypeInt, SP()) });
-	}
-
-	llvm::GlobalVariable* R0()
-	{
-		return globals["~R0"];
-	}
-
-	llvm::Value* GetR0()
-	{
-		return IR()->CreateLoad(TypeInt, R0());
-	}
-
-	llvm::GlobalVariable* R1()
-	{
-		return globals["~R1"];
-	}
-
-	llvm::Value* GetR1()
-	{
-		return IR()->CreateLoad(TypeInt, R1());
-	}
-
+	llvm::IRBuilder<>* IR();
+	llvm::GlobalVariable* SP();
+	llvm::Value* GetSP();
+	llvm::GlobalVariable* Stack();
+	llvm::Value* StackLoc();
+	llvm::GlobalVariable* R0();
+	llvm::Value* GetR0();
+	llvm::GlobalVariable* R1();
+	llvm::Value* GetR1();
 	void IncStack();
 	void DecStack();
  private:

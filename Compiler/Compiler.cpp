@@ -63,7 +63,8 @@ void Compiler::CompileToken(Token& t)
 	switch (t.type)
 	{
 		case TokenType::WORD:
-			assert(0);
+			t.interpret(llvm);
+			break;
 		case TokenType::PUSH_INTEGER:
 			llvm.IR()->CreateStore(llvm::ConstantInt::get(llvm.TypeInt, t.v_i), llvm.StackLoc());
 			llvm.IncStack();
