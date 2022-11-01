@@ -21,15 +21,19 @@ class CompilerLLVM
 	llvm::IRBuilder<>* CreateBuilder(std::string name, llvm::Function* func);
 	void FinishFunc();
 	void Disassemble(void* exec, size_t sz, size_t address);
+	llvm::GlobalVariable* CreateGlobal(std::string name);
 
 	void Run();
 
 	llvm::Type* TypeNone = nullptr;
 	llvm::Type* TypeBit = nullptr;
 	llvm::Type* TypeInt = nullptr;
+	llvm::Type* TypePtr = nullptr;
 	llvm::Type* TypeFloat = nullptr;
 	std::unique_ptr<llvm::Module> Module = nullptr;
+	std::unique_ptr<llvm::LLVMContext> Context = nullptr;
 
+	llvm::GlobalVariable* GetGlobal(std::string name);
 	llvm::IRBuilder<>* IR();
 	llvm::GlobalVariable* SP();
 	llvm::Value* GetSP();
@@ -49,7 +53,6 @@ class CompilerLLVM
 	bool optimise;
 	bool allow_end;
 
-	std::unique_ptr<llvm::LLVMContext> Context = nullptr;
 	std::unique_ptr<llvm::TargetMachine> Target = nullptr;
 	std::map<std::string, llvm::GlobalVariable*> globals;
 	llvm::Function* func = nullptr;

@@ -172,6 +172,7 @@ void CompilerLLVM::SetupProfile(bool optimise, bool allow_end, std::string modul
 	TypeBit = llvm::Type::getInt1Ty(Module->getContext());
 	TypeFloat = llvm::Type::getDoubleTy(Module->getContext());
 	TypeInt = llvm::Type::getInt64Ty(Module->getContext());
+	TypePtr = llvm::Type::getInt64PtrTy(Module->getContext());
 
 /*	Module->getOrInsertFunction("PrintByte", TypeNone, TypeByte);
 	Module->getOrInsertFunction("PrintInteger", TypeNone, TypeInt);
@@ -327,4 +328,21 @@ llvm::GlobalVariable* CompilerLLVM::R1()
 llvm::Value* CompilerLLVM::GetR1()
 {
 	return IR()->CreateLoad(TypeInt, R1());
+}
+
+llvm::GlobalVariable* CompilerLLVM::CreateGlobal(std::string name)
+{
+	auto gv = new llvm::GlobalVariable(*Module,
+		TypePtr,
+		false,
+		llvm::GlobalValue::InternalLinkage,
+		llvm::ConstantPointerNull::get(llvm::PointerType::get(TypePtr, 0)),
+		name);
+	globals[name] = gv;
+	return globals[name];
+}
+
+llvm::GlobalVariable* CompilerLLVM::GetGlobal(std::string name)
+{
+	return globals[name];
 }

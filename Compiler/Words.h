@@ -1,5 +1,5 @@
 struct Word
 {
-	void (* compile)(std::list<Token>&, std::list<Token>::const_iterator, CompilerLLVM& llvm);
+	bool (* compile)(std::list<Token>&, std::list<Token>::iterator&, CompilerLLVM&);
 	void (* interpret)(CompilerLLVM& llvm);
 };

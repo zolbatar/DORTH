@@ -10,8 +10,9 @@ enum class TokenType
 	POP_R1,
 	PUSH_R0,
 	WORD,
-	CALLNATIVE,
 
+	CREATEGLOBAL,
+	CALLNATIVE,
 	ADD,
 	SUBTRACT,
 };

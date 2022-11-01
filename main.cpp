@@ -9,7 +9,8 @@ int main()
 	//ui.Start();
 //	compiler.Compile("STATE . : foo 100 . ; 200 DROP 100 250 + . 100 250 - . 123 .");
 //	compiler.Compile("STATE . : STATE .");
-	compiler.Compile(": CONSTANT CREATE , DOES> @ ;");
+	compiler.Compile("CREATE HELLO , HELLO .");
+	//compiler.Compile(": CONSTANT CREATE , DOES> @ ;");
 // 76 CONSTANT TROMBONES
 	compiler.Run();
 	return 0;

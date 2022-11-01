@@ -36,6 +36,9 @@ void Compiler::DumpIR()
 			case TokenType::ADD:
 				DumpNativeWord(*t, "+      ");
 				break;
+			case TokenType::CREATEGLOBAL:
+				printf("[CREATE ]: '%s'\n", t->word.c_str());
+				break;
 			case TokenType::SUBTRACT:
 				DumpNativeWord(*t, "-      ");
 				break;

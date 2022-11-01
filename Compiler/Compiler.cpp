@@ -63,7 +63,23 @@ void Compiler::CompileToken(Token& t)
 	switch (t.type)
 	{
 		case TokenType::WORD:
-			t.interpret(llvm);
+			if (t.interpret)
+			{
+				t.interpret(llvm);
+			}
+			else
+			{
+				llvm::GlobalVariable* glob = llvm.GetGlobal(t.word);
+				if (glob)
+				{
+					llvm.IR()->CreateStore( glob, llvm.StackLoc());
+					llvm.IncStack();
+				}
+				else
+				{
+					std::cout << "Word '" << t.word << "' not found" << std::endl;
+				}
+			}
 			break;
 		case TokenType::PUSH_INTEGER:
 			llvm.IR()->CreateStore(llvm::ConstantInt::get(llvm.TypeInt, t.v_i), llvm.StackLoc());
@@ -89,6 +105,13 @@ void Compiler::CompileToken(Token& t)
 		case TokenType::CALLNATIVE:
 			llvm.IR()->CreateCall(t.native, { llvm.GetR0() });
 			break;
+		case TokenType::CREATEGLOBAL:
+		{
+			auto gv = llvm.CreateGlobal(t.word);
+			llvm.IR()->CreateStore(gv, llvm.StackLoc());
+			llvm.IncStack();
+			break;
+		}
 		case TokenType::ADD:
 			llvm.IR()->CreateStore(llvm.IR()->CreateAdd(llvm.GetR0(), llvm.GetR1()), llvm.R0());
 			break;

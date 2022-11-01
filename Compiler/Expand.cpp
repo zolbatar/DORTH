@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Compiler.h"
 
 void Compiler::Expand()
@@ -8,8 +9,9 @@ void Compiler::Expand()
 	}
 }
 
-void Compiler::ExpandToken(std::list<Token>::iterator t)
+void Compiler::ExpandToken(std::list<Token>::iterator& t)
 {
+	std::cout << t->word << std::endl;
 	switch (t->type)
 	{
 		case TokenType::WORD:
@@ -17,19 +19,21 @@ void Compiler::ExpandToken(std::list<Token>::iterator t)
 			auto iter = native_words.find(t->word);
 			if (iter == native_words.end())
 			{
-				printf("Word '%s' not found\n", t->word.c_str());
-				exit(1);
-			}
-			auto current = t;
-			t++;
-			if (iter->second.compile != nullptr)
+				// No word logic found
+				t++;
+			} else
 			{
-				iter->second.compile(tokens, t, llvm);
-				tokens.erase(current);
-			}
-			else
-			{
-				current->interpret = iter->second.interpret;
+				auto current = t;
+				t++;
+				if (iter->second.compile != nullptr)
+				{
+					if (iter->second.compile(tokens, t, llvm))
+						tokens.erase(current);
+				}
+				else
+				{
+					current->interpret = iter->second.interpret;
+				}
 			}
 			break;
 		}

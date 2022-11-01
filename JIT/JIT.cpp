@@ -39,7 +39,7 @@ void JIT::Run(CompilerLLVM* llvm)
 	{
 		auto proc_start = JIT->lookup("Implicit");
 		auto entry = llvm::jitTargetAddressToFunction<void (*)()>(proc_start->getValue());
-		llvm->Disassemble((void*)entry, 100, (size_t)entry);
+		//llvm->Disassemble((void*)entry, 100, (size_t)entry);
 		entry();
 	}
 	catch (const std::exception& ex)
