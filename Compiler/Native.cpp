@@ -18,6 +18,68 @@ extern "C" void __HEXDOT(int64_t i)
 	console_print(buffer);
 }
 
+/*
+ * Interpret time
+ */
+
+static void ALLOT(CompilerLLVM& llvm)
+{
+	llvm.DecStack();
+	auto ptr = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
+	llvm.DecStack();
+	auto elements = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
+
+	// Allocate space
+	auto inst = llvm::CallInst::CreateMalloc(
+		llvm.IR()->GetInsertBlock(),
+		llvm.TypeInt,
+		llvm.TypeInt,
+		llvm::ConstantInt::get(llvm.TypeInt, llvm.Module->getDataLayout().getTypeAllocSize(llvm.TypeInt)),
+		elements,
+		nullptr,
+		"Comma");
+	llvm.IR()->Insert(inst);
+
+	// Cast to T*:
+	auto val = llvm.IR()->CreatePointerCast(inst, llvm.TypePtr);
+	llvm.IR()->CreateStore(ptr, val);
+}
+
+static void AT(CompilerLLVM& llvm)
+{
+	llvm.DecStack();
+	auto ptr = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
+	auto ptr_to = llvm.IR()->CreateIntToPtr(ptr, llvm.TypePtr);
+	auto val = llvm.IR()->CreateLoad(llvm.TypeInt, ptr_to);
+	llvm.IR()->CreateStore(val, llvm.StackLoc());
+	llvm.IncStack();
+}
+
+static void COMMA(CompilerLLVM& llvm)
+{
+	llvm.DecStack();
+	auto ptr = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
+
+	// Allocate space
+	auto inst = llvm::CallInst::CreateMalloc(
+		llvm.IR()->GetInsertBlock(),
+		llvm.TypeInt,
+		llvm.TypeInt,
+		llvm::ConstantInt::get(llvm.TypeInt, llvm.Module->getDataLayout().getTypeAllocSize(llvm.TypeInt)),
+		llvm::ConstantInt::get(llvm.TypeInt, 1),
+		nullptr,
+		"Comma");
+	llvm.IR()->Insert(inst);
+
+	// Cast to T*:
+	auto val = llvm.IR()->CreatePointerCast(inst, llvm.TypePtr);
+	llvm.IR()->CreateStore(ptr, val);
+}
+
+/*
+ * Compile time
+ */
+
 static bool COLON(std::list<Token>& tokens, std::list<Token>::iterator& t, CompilerLLVM& llvm)
 {
 	if (state != 0)
@@ -49,47 +111,6 @@ static bool DOT(std::list<Token>& tokens, std::list<Token>::iterator& t, Compile
 		.native = llvm.Module->getFunction("__DOT"),
 		.word="__DOT" });
 	return true;
-}
-
-static void ALLOT(CompilerLLVM& llvm)
-{
-	llvm.DecStack();
-	auto elements = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
-
-	// Allocate space
-	auto inst = llvm::CallInst::CreateMalloc(
-		llvm.IR()->GetInsertBlock(),
-		llvm.TypeInt,
-		llvm.TypeInt,
-		llvm::ConstantInt::get(llvm.TypeInt, llvm.Module->getDataLayout().getTypeAllocSize(llvm.TypeInt)),
-		elements,
-		nullptr,
-		"Comma");
-	llvm.IR()->Insert(inst);
-
-	// Cast to T*:
-	auto val = llvm.IR()->CreatePointerCast(inst, llvm.TypePtr);
-	llvm.IR()->CreateStore(llvm.GetGlobal("HELLO"), val);
-}
-static void COMMA(CompilerLLVM& llvm)
-{
-	llvm.DecStack();
-	auto ptr = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
-
-	// Allocate space
-	auto inst = llvm::CallInst::CreateMalloc(
-		llvm.IR()->GetInsertBlock(),
-		llvm.TypeInt,
-		llvm.TypeInt,
-		llvm::ConstantInt::get(llvm.TypeInt, llvm.Module->getDataLayout().getTypeAllocSize(llvm.TypeInt)),
-		llvm::ConstantInt::get(llvm.TypeInt, 1),
-		nullptr,
-		"Comma");
-	llvm.IR()->Insert(inst);
-
-	// Cast to T*:
-	auto val = llvm.IR()->CreatePointerCast(inst, llvm.TypePtr);
-	llvm.IR()->CreateStore(ptr, val);
 }
 
 static bool HEXDOT(std::list<Token>& tokens, std::list<Token>::iterator& t, CompilerLLVM& llvm)
@@ -143,6 +164,7 @@ void Compiler::NativeInit(CompilerLLVM& llvm)
 	llvm.Module->getOrInsertFunction("__HEXDOT", llvm.TypeNone, llvm.TypeInt);
 	native_words.emplace(std::make_pair(".", Word{ &DOT, nullptr }));
 	native_words.emplace(std::make_pair("HEX.", Word{ &HEXDOT, nullptr }));
+	native_words.emplace(std::make_pair("@", Word{ nullptr, &AT }));
 	native_words.emplace(std::make_pair(",", Word{ nullptr, &COMMA }));
 	native_words.emplace(std::make_pair("-", Word{ &MINUS, nullptr }));
 	native_words.emplace(std::make_pair("+", Word{ &PLUS, nullptr }));
