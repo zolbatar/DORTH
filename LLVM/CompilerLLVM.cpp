@@ -259,6 +259,29 @@ llvm::Function* CompilerLLVM::CreateFunc(std::string name)
 	return func;
 }
 
+llvm::Function* CompilerLLVM::CreateWordFunc(std::string name)
+{
+	func_word = CreateFunc(name);
+	ir_word = CreateBuilder(name + " Builder", func_word);
+	return func_word;
+}
+
+void CompilerLLVM::EndWordFunc()
+{
+	FinishFunc();
+	func_word = nullptr;
+}
+
+void CompilerLLVM::FinishFunc()
+{
+	IR()->CreateRetVoid();
+}
+
+llvm::IRBuilder<>* CompilerLLVM::IR()
+{
+	return func_word ? ir_word : ir;
+}
+
 llvm::IRBuilder<>* CompilerLLVM::CreateBuilder(std::string name, llvm::Function* func)
 {
 	auto builder = new llvm::IRBuilder<>(llvm::BasicBlock::Create(Module->getContext(), name, func));
@@ -281,16 +304,6 @@ void CompilerLLVM::IncDP(llvm::Value* v)
 {
 	auto new_value = IR()->CreateAdd(GetSP(), v);
 	IR()->CreateStore(new_value, SP());
-}
-
-void CompilerLLVM::FinishFunc()
-{
-	IR()->CreateRetVoid();
-}
-
-llvm::IRBuilder<>* CompilerLLVM::IR()
-{
-	return ir;
 }
 
 llvm::GlobalVariable* CompilerLLVM::DP()

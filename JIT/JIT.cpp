@@ -5,11 +5,8 @@
 std::map<std::string, void*> JIT::Run(CompilerLLVM* llvm, std::list<std::string> vars)
 {
 	// Create an LLJIT instance.
-	/*auto jit = llvm::orc::LLLazyJITBuilder()
-			.setNumCompileThreads(4)
-			.setLazyCompileFailureAddr(ea)
-			.create();*/
-	auto jit = llvm::orc::LLJITBuilder().setNumCompileThreads(4).create();
+	auto jit = llvm::orc::LLLazyJITBuilder().setNumCompileThreads(4).create();
+//	auto jit = llvm::orc::LLJITBuilder().setNumCompileThreads(4).create();
 	if (!jit)
 	{
 		std::cout << "Can't create JIT\n";

@@ -11,7 +11,7 @@ void Compiler::Expand()
 
 void Compiler::ExpandToken(std::list<Token>::iterator& t)
 {
-	std::cout << t->word << std::endl;
+//	std::cout << t->word << std::endl;
 	switch (t->type)
 	{
 		case TokenType::WORD:
@@ -21,7 +21,8 @@ void Compiler::ExpandToken(std::list<Token>::iterator& t)
 			{
 				// No word logic found
 				t++;
-			} else
+			}
+			else
 			{
 				auto current = t;
 				t++;

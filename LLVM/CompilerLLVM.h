@@ -22,6 +22,8 @@ class CompilerLLVM
 	void FinishFunc();
 	void Disassemble(void* exec, size_t sz, size_t address);
 	llvm::GlobalVariable* CreateGlobal(std::string name);
+	llvm::Function* CreateWordFunc(std::string name);
+	void EndWordFunc();
 
 	void Run(std::list<std::string> variables);
 
@@ -72,4 +74,6 @@ class CompilerLLVM
 	llvm::Function* func = nullptr;
 	llvm::IRBuilder<>* ir;
 
+	llvm::Function* func_word = nullptr;
+	llvm::IRBuilder<>* ir_word;
 };

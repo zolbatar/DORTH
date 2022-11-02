@@ -8,6 +8,7 @@
 #include "Tokens.h"
 #include "Words.h"
 #include "../LLVM/CompilerLLVM.h"
+#include "../Runtime/Runtime.h"
 
 typedef int (* start)(void);
 

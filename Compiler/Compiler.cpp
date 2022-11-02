@@ -2,6 +2,8 @@
 #include "Compiler.h"
 #include "../Library/StringLib.h"
 
+extern std::map<std::string, std::list<Token>> words;
+
 Compiler::Compiler()
 {
 	llvm.SetupProfile(true, false, "Dorth", StackSize, DataSize);
@@ -116,6 +118,13 @@ void Compiler::CompileToken(Token& t)
 			break;
 		case TokenType::SUBTRACT:
 			llvm.IR()->CreateStore(llvm.IR()->CreateSub(llvm.GetR0(), llvm.GetR1()), llvm.R0());
+			break;
+
+		case TokenType::CREATEWORD:
+			llvm.CreateWordFunc(t.word);
+			break;
+		case TokenType::ENDWORD:
+			llvm.EndWordFunc();
 			break;
 	}
 }

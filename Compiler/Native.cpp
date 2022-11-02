@@ -1,8 +1,11 @@
+#include <iostream>
 #include "Compiler.h"
 #include "../LLVM/CompilerLLVM.h"
 #include "../Runtime/Runtime.h"
 
 std::string compiling_word_name;
+Token* current_word = nullptr;
+std::map<std::string, std::list<Token>> words;
 
 extern "C" void __DOT(int64_t i)
 {
@@ -66,21 +69,27 @@ static void HERE(CompilerLLVM& llvm)
 
 static bool COLON(std::list<Token>& tokens, std::list<Token>::iterator& t, CompilerLLVM& llvm)
 {
-	if (state != 0)
+	if (state != CompilerState::NORMAL)
 	{
 		console_print("Exception, already in non-zero compilation state.");
 		exit(1);
 	}
-	state = 1;
+	state = CompilerState::COMPILATION;
 
-	// Get name
-	compiling_word_name = t->word;
+	current_word = &*tokens.insert(t, Token{ TokenType::CREATEWORD, .word = t->word });
+	auto current = t;
 	t++;
-	return false;
+	tokens.erase(current);
+	return true;
 }
 
 static bool CREATE(std::list<Token>& tokens, std::list<Token>::iterator& t, CompilerLLVM& llvm)
 {
+	if (state != CompilerState::NORMAL)
+	{
+		current_word->needs_compile_support = true;
+		return false;
+	}
 	tokens.insert(t, Token{ TokenType::CREATEGLOBAL, .word = t->word });
 	auto current = t;
 	t++;
@@ -132,13 +141,51 @@ static bool PLUS(std::list<Token>& tokens, std::list<Token>::iterator& t, Compil
 
 static bool SEMICOLON(std::list<Token>& tokens, std::list<Token>::iterator& t, CompilerLLVM& llvm)
 {
-	state = 0;
-	return false;
+	//tokens.insert(t, Token{ TokenType::ENDWORD });
+	state = CompilerState::NORMAL;
+
+	// Find where this word starts
+	auto name = current_word->word;
+	auto iter = tokens.end();
+	for (auto i = tokens.begin(); i != tokens.end(); ++i)
+	{
+		if (&*i == current_word)
+		{
+			iter = i;
+			break;
+		}
+	}
+
+	// And ends
+	auto end_iter = iter;
+	end_iter++;
+	while (end_iter != t)
+	{
+		end_iter++;
+	}
+	end_iter--;
+
+	// Create new word list
+	std::list<Token> word;
+	word.splice(word.begin(), tokens, iter, end_iter);
+
+	// And move to "words" map
+	words.insert(std::make_pair(name, std::move(word)));
+
+	return true;
 }
 
 static bool STATE(std::list<Token>& tokens, std::list<Token>::iterator& t, CompilerLLVM& llvm)
 {
-	tokens.insert(t, Token{ TokenType::PUSH_INTEGER, .v_i = state });
+	switch (state)
+	{
+		case CompilerState::NORMAL:
+			tokens.insert(t, Token{ TokenType::PUSH_INTEGER, .v_i = 0 });
+			break;
+		default:
+			tokens.insert(t, Token{ TokenType::PUSH_INTEGER, .v_i = 1 });
+			break;
+	}
 	return true;
 }
 

@@ -7,9 +7,11 @@ int main()
 	Compiler compiler;
 //	UISDL ui(compiler);
 	//ui.Start();
-//	compiler.Compile("STATE . : foo 100 . ; 200 DROP 100 250 + . 100 250 - . 123 .");
+//	compiler.Compile(": TEST 100 . ; : VARIABLE CREATE 0 , ; TEST");
+	compiler.Compile(": TEST 100 . ; TEST");
+//	compiler.Compile(": TEST 100 . ; : VARIABLE CREATE 0 , ; VARIABLE ORANGES");
 //	compiler.Compile("STATE . : STATE .");
-	compiler.Compile("CREATE HELLO 100 , HELLO @ HEX.");
+//	compiler.Compile("CREATE HELLO 100 , HELLO @ HEX.");
 //	compiler.Compile("CREATE HELLO 100 , HELLO @ HEX.");
 	//compiler.Compile(": CONSTANT CREATE , DOES> @ ;");
 // 76 CONSTANT TROMBONES

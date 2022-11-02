@@ -1,4 +1,5 @@
 #include <cstdint>
+#include "Runtime.h"
 
 uint8_t base = 10;
-uint8_t state = 0;
+CompilerState state = CompilerState::NORMAL;

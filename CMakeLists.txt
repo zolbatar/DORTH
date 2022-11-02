@@ -82,7 +82,7 @@ add_executable(DORTH
         ImGuiBindings/imgui_impl_sdl.cpp
 
         Runtime/Console.cpp
-        Runtime/Runtime.cpp Runtime/Runtime.h)
+        Runtime/Runtime.cpp Runtime/Runtime.h Runtime/State.h)
 target_link_libraries(${PROJECT_NAME} ${LIBS} ${CONAN_LIBS} ${LLVM_LIBS})
 
 get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
