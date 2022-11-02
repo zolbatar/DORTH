@@ -1,5 +1,6 @@
 #include "Compiler.h"
 #include "../Runtime/Runtime.h"
+#include "../Library/StringLib.h"
 
 void Compiler::ProcessWord(std::string word)
 {
@@ -70,6 +71,8 @@ void Compiler::ProcessWord(std::string word)
 	}
 
 	// Gotta be a word!
+
+	toupper(word);
 	tokens.emplace_back(Token{ TokenType::WORD, .word = word });
 	return;
 }

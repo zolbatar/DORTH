@@ -16,7 +16,7 @@ class CompilerLLVM
 {
  public:
 	CompilerLLVM();
-	void SetupProfile(bool optimise, bool allow_end, std::string module, size_t stack_size);
+	void SetupProfile(bool optimise, bool allow_end, std::string module, size_t stack_size, size_t data_size);
 	llvm::Function* CreateFunc(std::string name);
 	llvm::IRBuilder<>* CreateBuilder(std::string name, llvm::Function* func);
 	void FinishFunc();
@@ -36,19 +36,27 @@ class CompilerLLVM
 	llvm::GlobalVariable* GetGlobal(std::string name);
 	llvm::IRBuilder<>* IR();
 
-	// Forth system registers
-	llvm::GlobalVariable* DP();
-	llvm::Value* GetDP();
+	// Stack
 	llvm::GlobalVariable* SP();
 	llvm::Value* GetSP();
 	llvm::GlobalVariable* Stack();
 	llvm::Value* StackLoc();
+	void IncStack();
+	void DecStack();
+
+	// Data
+	llvm::GlobalVariable* DP();
+	llvm::Value* GetDP();
+	llvm::GlobalVariable* Data();
+	llvm::Value* DataLoc();
+	llvm::Value* DataLocAddress(llvm::Value* v);
+	void IncDP(llvm::Value* v);
+
+	// Forth system registers
 	llvm::GlobalVariable* R0();
 	llvm::Value* GetR0();
 	llvm::GlobalVariable* R1();
 	llvm::Value* GetR1();
-	void IncStack();
-	void DecStack();
  private:
 	void AddOptPasses(llvm::legacy::PassManagerBase& passes, llvm::legacy::FunctionPassManager& fnPasses);
 	void OptimiseModule();

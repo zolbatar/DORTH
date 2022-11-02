@@ -27,6 +27,7 @@ class Compiler
 	void CompileToken(Token& t);
 
 	const size_t StackSize = 1024;
+	const size_t DataSize = 65536;
 	CompilerLLVM llvm;
 	std::map<std::string, Word> native_words;
 	std::list<Token> tokens;

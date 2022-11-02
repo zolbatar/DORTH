@@ -121,7 +121,7 @@ static std::string getFeaturesStr()
 	return Features.getString();
 }
 
-void CompilerLLVM::SetupProfile(bool optimise, bool allow_end, std::string module, size_t stack_size)
+void CompilerLLVM::SetupProfile(bool optimise, bool allow_end, std::string module, size_t stack_size, size_t data_size)
 {
 	// Optimisations
 	llvm::CodeGenOpt::Level OLvl = llvm::CodeGenOpt::Default;
@@ -176,10 +176,17 @@ void CompilerLLVM::SetupProfile(bool optimise, bool allow_end, std::string modul
 
 	// Stack
 	auto typ = llvm::ArrayType::get(TypeInt, stack_size);
-	auto init = llvm::ConstantAggregateZero::get(llvm::ArrayType::get(TypeInt, stack_size));
+	auto init = llvm::ConstantAggregateZero::get(typ);
 	globals["~Stack"] = new llvm::GlobalVariable(*Module, typ, false, llvm::GlobalValue::InternalLinkage, init, "Stack");
 	globals["~SP"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "SP");
-	globals["~DP"] = new llvm::GlobalVariable(*Module, TypePtr, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "DP");
+
+	// Data
+	auto typ_ds = llvm::ArrayType::get(TypeInt, data_size);
+	auto init_ds = llvm::ConstantAggregateZero::get(typ_ds);
+	globals["~Data"] = new llvm::GlobalVariable(*Module, typ_ds, false, llvm::GlobalValue::InternalLinkage, init_ds, "Data");
+	globals["~DP"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "DP");
+
+	// Temp registers
 	globals["~R0"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "R0");
 	globals["~R1"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "R1");
 
@@ -270,6 +277,12 @@ void CompilerLLVM::DecStack()
 	IR()->CreateStore(new_value, SP());
 }
 
+void CompilerLLVM::IncDP(llvm::Value* v)
+{
+	auto new_value = IR()->CreateAdd(GetSP(), v);
+	IR()->CreateStore(new_value, SP());
+}
+
 void CompilerLLVM::FinishFunc()
 {
 	IR()->CreateRetVoid();
@@ -287,7 +300,7 @@ llvm::GlobalVariable* CompilerLLVM::DP()
 
 llvm::Value* CompilerLLVM::GetDP()
 {
-	return IR()->CreateLoad(TypePtr, globals["~DP"]);
+	return IR()->CreateLoad(TypeInt, globals["~DP"]);
 }
 
 llvm::GlobalVariable* CompilerLLVM::SP()
@@ -300,6 +313,21 @@ llvm::Value* CompilerLLVM::GetSP()
 	return IR()->CreateLoad(TypeInt, globals["~SP"]);
 }
 
+llvm::GlobalVariable* CompilerLLVM::Data()
+{
+	return globals["~Data"];
+}
+
+llvm::Value* CompilerLLVM::DataLoc()
+{
+	return IR()->CreateGEP(Data()->getValueType(), Data(), { llvm::ConstantInt::get(TypeInt, 0), IR()->CreateLoad(TypeInt, DP()) });
+}
+
+llvm::Value* CompilerLLVM::DataLocAddress(llvm::Value* v)
+{
+	return IR()->CreateGEP(Data()->getValueType(), Data(), { llvm::ConstantInt::get(TypeInt, 0), v });
+}
+
 llvm::GlobalVariable* CompilerLLVM::Stack()
 {
 	return globals["~Stack"];
@@ -307,7 +335,7 @@ llvm::GlobalVariable* CompilerLLVM::Stack()
 
 llvm::Value* CompilerLLVM::StackLoc()
 {
-	return IR()->CreateGEP(Stack()->getValueType(), Stack(), { IR()->CreateLoad(TypeInt, SP()) });
+	return IR()->CreateGEP(Stack()->getValueType(), Stack(), { llvm::ConstantInt::get(TypeInt, 0), IR()->CreateLoad(TypeInt, SP()) });
 }
 
 llvm::GlobalVariable* CompilerLLVM::R0()
@@ -332,6 +360,7 @@ llvm::Value* CompilerLLVM::GetR1()
 
 llvm::GlobalVariable* CompilerLLVM::CreateGlobal(std::string name)
 {
+	// Set at HERE, i.e. current data position
 	auto gv = new llvm::GlobalVariable(*Module,
 		TypePtr,
 		false,
@@ -339,6 +368,7 @@ llvm::GlobalVariable* CompilerLLVM::CreateGlobal(std::string name)
 		llvm::ConstantPointerNull::get(llvm::PointerType::get(TypePtr, 0)),
 		name);
 	globals[name] = gv;
+	IR()->CreateStore(DataLoc(), gv);
 	return globals[name];
 }
 

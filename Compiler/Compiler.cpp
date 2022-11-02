@@ -4,7 +4,7 @@
 
 Compiler::Compiler()
 {
-	llvm.SetupProfile(true, false, "Dorth", StackSize);
+	llvm.SetupProfile(true, false, "Dorth", StackSize, DataSize);
 	NativeInit(llvm);
 }
 
@@ -72,7 +72,7 @@ void Compiler::CompileToken(Token& t)
 				llvm::GlobalVariable* glob = llvm.GetGlobal(t.word);
 				if (glob)
 				{
-					llvm.IR()->CreateStore(glob, llvm.StackLoc());
+					llvm.IR()->CreateStore(llvm.IR()->CreateLoad(llvm.TypePtr, glob), llvm.StackLoc());
 					llvm.IncStack();
 				}
 				else
@@ -106,12 +106,9 @@ void Compiler::CompileToken(Token& t)
 			llvm.IR()->CreateCall(t.native, { llvm.GetR0() });
 			break;
 		case TokenType::CREATEGLOBAL:
-		{
-			auto gv = llvm.CreateGlobal(t.word);
-			llvm.IR()->CreateStore( gv, llvm.StackLoc());
+			llvm.IR()->CreateStore(llvm.CreateGlobal(t.word), llvm.StackLoc());
 			llvm.IncStack();
 			break;
-		}
 		case TokenType::ADD:
 			llvm.IR()->CreateStore(llvm.IR()->CreateAdd(llvm.GetR0(), llvm.GetR1()), llvm.R0());
 			break;

@@ -7,14 +7,14 @@ std::string compiling_word_name;
 extern "C" void __DOT(int64_t i)
 {
 	char buffer[256];
-	sprintf(buffer, "%lld ", i);
+	snprintf(buffer, 256, "%lld ", i);
 	console_print(buffer);
 }
 
 extern "C" void __HEXDOT(int64_t i)
 {
 	char buffer[256];
-	sprintf(buffer, "%llx ", i);
+	snprintf(buffer, 256, "%llx ", i);
 	console_print(buffer);
 }
 
@@ -24,33 +24,20 @@ extern "C" void __HEXDOT(int64_t i)
 
 static void ALLOT(CompilerLLVM& llvm)
 {
-	llvm.DecStack();
-	auto ptr = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
+	// Number of elements
 	llvm.DecStack();
 	auto elements = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
 
-	// Allocate space
-	auto inst = llvm::CallInst::CreateMalloc(
-		llvm.IR()->GetInsertBlock(),
-		llvm.TypeInt,
-		llvm.TypeInt,
-		llvm::ConstantInt::get(llvm.TypeInt, llvm.Module->getDataLayout().getTypeAllocSize(llvm.TypeInt)),
-		elements,
-		nullptr,
-		"Comma");
-	llvm.IR()->Insert(inst);
-
-	// Cast to T*:
-	auto val = llvm.IR()->CreatePointerCast(inst, llvm.TypePtr);
-	llvm.IR()->CreateStore(ptr, val);
+	// Move pointer
+	llvm.IncDP(elements);
 }
 
 static void AT(CompilerLLVM& llvm)
 {
 	llvm.DecStack();
-	auto ptr = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
-	auto ptr_to = llvm.IR()->CreateIntToPtr(ptr, llvm.TypePtr);
-	auto val = llvm.IR()->CreateLoad(llvm.TypeInt, ptr_to);
+	auto ptr = llvm.IR()->CreateLoad(llvm.TypePtr, llvm.StackLoc());
+//	auto ptr_to = llvm.IR()->CreateIntToPtr(ptr, llvm.TypePtr);
+	auto val = llvm.IR()->CreateLoad(llvm.TypeInt, ptr);
 	llvm.IR()->CreateStore(val, llvm.StackLoc());
 	llvm.IncStack();
 }
@@ -61,25 +48,16 @@ static void COMMA(CompilerLLVM& llvm)
 	llvm.DecStack();
 	auto value = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
 
-	// Location
-	llvm.DecStack();
-	auto ptr = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
-	auto ptr_to = llvm.IR()->CreateIntToPtr(ptr, llvm.TypePtr);
+	// Store and move pointer
+	llvm.IR()->CreateStore(value, llvm.DataLoc());
+	llvm.IncDP(llvm::ConstantInt::get(llvm.TypeInt, 1));
+}
 
-	// Allocate space
-	auto inst = llvm::CallInst::CreateMalloc(
-		llvm.IR()->GetInsertBlock(),
-		llvm.TypeInt,
-		llvm.TypeInt,
-		llvm::ConstantInt::get(llvm.TypeInt, llvm.Module->getDataLayout().getTypeAllocSize(llvm.TypeInt)),
-		llvm::ConstantInt::get(llvm.TypeInt, 1),
-		nullptr,
-		"Comma");
-	llvm.IR()->Insert(inst);
-	llvm.IR()->CreateStore(inst, ptr_to);
-
-	// Save value
-//	llvm.IR()->CreateStore(inst, value);
+static void HERE(CompilerLLVM& llvm)
+{
+	auto dp = llvm.DataLoc();
+	llvm.IR()->CreateStore(dp, llvm.StackLoc());
+	llvm.IncStack();
 }
 
 /*
@@ -168,15 +146,16 @@ void Compiler::NativeInit(CompilerLLVM& llvm)
 {
 	llvm.Module->getOrInsertFunction("__DOT", llvm.TypeNone, llvm.TypeInt);
 	llvm.Module->getOrInsertFunction("__HEXDOT", llvm.TypeNone, llvm.TypeInt);
-	native_words.emplace(std::make_pair(".", Word{ &DOT, nullptr }));
-	native_words.emplace(std::make_pair("HEX.", Word{ &HEXDOT, nullptr }));
-	native_words.emplace(std::make_pair("@", Word{ nullptr, &AT }));
-	native_words.emplace(std::make_pair(",", Word{ nullptr, &COMMA }));
-	native_words.emplace(std::make_pair("-", Word{ &MINUS, nullptr }));
-	native_words.emplace(std::make_pair("+", Word{ &PLUS, nullptr }));
-	native_words.emplace(std::make_pair(":", Word{ &COLON, nullptr }));
-	native_words.emplace(std::make_pair(";", Word{ &SEMICOLON, nullptr }));
-	native_words.emplace(std::make_pair("CREATE", Word{ &CREATE, nullptr }));
-	native_words.emplace(std::make_pair("DROP", Word{ &DROP, nullptr }));
-	native_words.emplace(std::make_pair("STATE", Word{ &STATE, nullptr }));
+	native_words.emplace(std::make_pair(".", Word{ .compile=&DOT }));
+	native_words.emplace(std::make_pair("HEX.", Word{ .compile=&HEXDOT }));
+	native_words.emplace(std::make_pair("@", Word{ .interpret=&AT }));
+	native_words.emplace(std::make_pair(",", Word{ .interpret=&COMMA }));
+	native_words.emplace(std::make_pair("-", Word{ .compile=&MINUS }));
+	native_words.emplace(std::make_pair("+", Word{ .compile=&PLUS }));
+	native_words.emplace(std::make_pair(":", Word{ .compile=&COLON }));
+	native_words.emplace(std::make_pair(";", Word{ .compile=&SEMICOLON }));
+	native_words.emplace(std::make_pair("CREATE", Word{ .compile=&CREATE }));
+	native_words.emplace(std::make_pair("DROP", Word{ .compile=&DROP }));
+	native_words.emplace(std::make_pair("HERE", Word{ .interpret= &HERE }));
+	native_words.emplace(std::make_pair("STATE", Word{ .compile=&STATE }));
 }
