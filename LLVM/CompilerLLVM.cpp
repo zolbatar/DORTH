@@ -174,22 +174,12 @@ void CompilerLLVM::SetupProfile(bool optimise, bool allow_end, std::string modul
 	TypeInt = llvm::Type::getInt64Ty(Module->getContext());
 	TypePtr = llvm::Type::getInt64PtrTy(Module->getContext());
 
-/*	Module->getOrInsertFunction("PrintByte", TypeNone, TypeByte);
-	Module->getOrInsertFunction("PrintInteger", TypeNone, TypeInt);
-	Module->getOrInsertFunction("PrintFloat", TypeNone, TypeFloat);
-	Module->getOrInsertFunction("PrintString", TypeNone, TypeString);
-	Module->getOrInsertFunction("PrintByteFormat", TypeNone, TypeByte, TypeString);
-	Module->getOrInsertFunction("PrintIntegerFormat", TypeNone, TypeInt, TypeString);
-	Module->getOrInsertFunction("PrintFloatFormat", TypeNone, TypeFloat, TypeString);
-	Module->getOrInsertFunction("PrintStringFormat", TypeNone, TypeString, TypeString);
-	Module->getOrInsertFunction("PrintNewline", TypeNone);
-	Module->getOrInsertFunction("Strings_AddPermanent", TypeNone, TypeString);*/
-
 	// Stack
 	auto typ = llvm::ArrayType::get(TypeInt, stack_size);
 	auto init = llvm::ConstantAggregateZero::get(llvm::ArrayType::get(TypeInt, stack_size));
 	globals["~Stack"] = new llvm::GlobalVariable(*Module, typ, false, llvm::GlobalValue::InternalLinkage, init, "Stack");
 	globals["~SP"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "SP");
+	globals["~DP"] = new llvm::GlobalVariable(*Module, TypePtr, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "DP");
 	globals["~R0"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "R0");
 	globals["~R1"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "R1");
 
@@ -288,6 +278,16 @@ void CompilerLLVM::FinishFunc()
 llvm::IRBuilder<>* CompilerLLVM::IR()
 {
 	return ir;
+}
+
+llvm::GlobalVariable* CompilerLLVM::DP()
+{
+	return globals["~DP"];
+}
+
+llvm::Value* CompilerLLVM::GetDP()
+{
+	return IR()->CreateLoad(TypePtr, globals["~DP"]);
 }
 
 llvm::GlobalVariable* CompilerLLVM::SP()

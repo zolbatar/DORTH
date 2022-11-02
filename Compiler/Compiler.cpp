@@ -72,7 +72,7 @@ void Compiler::CompileToken(Token& t)
 				llvm::GlobalVariable* glob = llvm.GetGlobal(t.word);
 				if (glob)
 				{
-					llvm.IR()->CreateStore( glob, llvm.StackLoc());
+					llvm.IR()->CreateStore(glob, llvm.StackLoc());
 					llvm.IncStack();
 				}
 				else
@@ -108,7 +108,7 @@ void Compiler::CompileToken(Token& t)
 		case TokenType::CREATEGLOBAL:
 		{
 			auto gv = llvm.CreateGlobal(t.word);
-			llvm.IR()->CreateStore(gv, llvm.StackLoc());
+			llvm.IR()->CreateStore( gv, llvm.StackLoc());
 			llvm.IncStack();
 			break;
 		}

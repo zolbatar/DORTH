@@ -57,8 +57,14 @@ static void AT(CompilerLLVM& llvm)
 
 static void COMMA(CompilerLLVM& llvm)
 {
+	// Value
+	llvm.DecStack();
+	auto value = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
+
+	// Location
 	llvm.DecStack();
 	auto ptr = llvm.IR()->CreateLoad(llvm.TypeInt, llvm.StackLoc());
+	auto ptr_to = llvm.IR()->CreateIntToPtr(ptr, llvm.TypePtr);
 
 	// Allocate space
 	auto inst = llvm::CallInst::CreateMalloc(
@@ -70,10 +76,10 @@ static void COMMA(CompilerLLVM& llvm)
 		nullptr,
 		"Comma");
 	llvm.IR()->Insert(inst);
+	llvm.IR()->CreateStore(inst, ptr_to);
 
-	// Cast to T*:
-	auto val = llvm.IR()->CreatePointerCast(inst, llvm.TypePtr);
-	llvm.IR()->CreateStore(ptr, val);
+	// Save value
+//	llvm.IR()->CreateStore(inst, value);
 }
 
 /*

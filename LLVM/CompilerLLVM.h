@@ -35,6 +35,10 @@ class CompilerLLVM
 
 	llvm::GlobalVariable* GetGlobal(std::string name);
 	llvm::IRBuilder<>* IR();
+
+	// Forth system registers
+	llvm::GlobalVariable* DP();
+	llvm::Value* GetDP();
 	llvm::GlobalVariable* SP();
 	llvm::Value* GetSP();
 	llvm::GlobalVariable* Stack();
