@@ -31,4 +31,5 @@ class Compiler
 	CompilerLLVM llvm;
 	std::map<std::string, Word> native_words;
 	std::list<Token> tokens;
+	std::list<std::string> variables;
 };

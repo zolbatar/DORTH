@@ -23,7 +23,7 @@ class CompilerLLVM
 	void Disassemble(void* exec, size_t sz, size_t address);
 	llvm::GlobalVariable* CreateGlobal(std::string name);
 
-	void Run();
+	void Run(std::list<std::string> variables);
 
 	llvm::Type* TypeNone = nullptr;
 	llvm::Type* TypeBit = nullptr;
@@ -61,8 +61,10 @@ class CompilerLLVM
 	void AddOptPasses(llvm::legacy::PassManagerBase& passes, llvm::legacy::FunctionPassManager& fnPasses);
 	void OptimiseModule();
 	void SetupCapstone();
+	llvm::GlobalVariable::LinkageTypes GetLinkage();
 
 	bool optimise;
+	bool interactive = true;
 	bool allow_end;
 
 	std::unique_ptr<llvm::TargetMachine> Target = nullptr;

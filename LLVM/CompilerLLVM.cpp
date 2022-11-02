@@ -177,18 +177,18 @@ void CompilerLLVM::SetupProfile(bool optimise, bool allow_end, std::string modul
 	// Stack
 	auto typ = llvm::ArrayType::get(TypeInt, stack_size);
 	auto init = llvm::ConstantAggregateZero::get(typ);
-	globals["~Stack"] = new llvm::GlobalVariable(*Module, typ, false, llvm::GlobalValue::InternalLinkage, init, "Stack");
-	globals["~SP"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "SP");
+	globals["~Stack"] = new llvm::GlobalVariable(*Module, typ, false, GetLinkage(), init, "Stack");
+	globals["~SP"] = new llvm::GlobalVariable(*Module, TypeInt, false, GetLinkage(), llvm::ConstantInt::get(TypeInt, 0), "SP");
 
 	// Data
 	auto typ_ds = llvm::ArrayType::get(TypeInt, data_size);
 	auto init_ds = llvm::ConstantAggregateZero::get(typ_ds);
-	globals["~Data"] = new llvm::GlobalVariable(*Module, typ_ds, false, llvm::GlobalValue::InternalLinkage, init_ds, "Data");
-	globals["~DP"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "DP");
+	globals["~Data"] = new llvm::GlobalVariable(*Module, typ_ds, false, GetLinkage(), init_ds, "Data");
+	globals["~DP"] = new llvm::GlobalVariable(*Module, TypeInt, false, GetLinkage(), llvm::ConstantInt::get(TypeInt, 0), "DP");
 
 	// Temp registers
-	globals["~R0"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "R0");
-	globals["~R1"] = new llvm::GlobalVariable(*Module, TypeInt, false, llvm::GlobalValue::InternalLinkage, llvm::ConstantInt::get(TypeInt, 0), "R1");
+	globals["~R0"] = new llvm::GlobalVariable(*Module, TypeInt, false, GetLinkage(), llvm::ConstantInt::get(TypeInt, 0), "R0");
+	globals["~R1"] = new llvm::GlobalVariable(*Module, TypeInt, false, GetLinkage(), llvm::ConstantInt::get(TypeInt, 0), "R1");
 
 	// Builders
 	func = CreateFunc("Implicit");
@@ -253,7 +253,7 @@ llvm::Function* CompilerLLVM::CreateFunc(std::string name)
 	llvm::ArrayRef<llvm::Type*> types;
 	auto ft = llvm::FunctionType::get(ret, types, false);
 	auto func = llvm::Function::Create(llvm::FunctionType::get(ret, types, false),
-		llvm::Function::ExternalLinkage,
+		GetLinkage(),
 		name,
 		Module.get());
 	return func;
@@ -364,7 +364,7 @@ llvm::GlobalVariable* CompilerLLVM::CreateGlobal(std::string name)
 	auto gv = new llvm::GlobalVariable(*Module,
 		TypePtr,
 		false,
-		llvm::GlobalValue::InternalLinkage,
+		GetLinkage(),
 		llvm::ConstantPointerNull::get(llvm::PointerType::get(TypePtr, 0)),
 		name);
 	globals[name] = gv;
@@ -375,4 +375,12 @@ llvm::GlobalVariable* CompilerLLVM::CreateGlobal(std::string name)
 llvm::GlobalVariable* CompilerLLVM::GetGlobal(std::string name)
 {
 	return globals[name];
+}
+
+llvm::GlobalVariable::LinkageTypes CompilerLLVM::GetLinkage()
+{
+	if (!interactive)
+		return llvm::GlobalValue::InternalLinkage;
+	else
+		return llvm::GlobalVariable::ExternalLinkage;
 }

@@ -53,6 +53,7 @@ void Compiler::Compile(std::string code)
 	DumpIR();
 
 	// Compile to native
+	variables.clear();
 	for (auto& token: tokens)
 		CompileToken(token);
 	llvm.FinishFunc();
@@ -106,6 +107,7 @@ void Compiler::CompileToken(Token& t)
 			llvm.IR()->CreateCall(t.native, { llvm.GetR0() });
 			break;
 		case TokenType::CREATEGLOBAL:
+			variables.push_back(t.word);
 			llvm.IR()->CreateStore(llvm.CreateGlobal(t.word), llvm.StackLoc());
 			llvm.IncStack();
 			break;
@@ -120,5 +122,5 @@ void Compiler::CompileToken(Token& t)
 
 void Compiler::Run()
 {
-	llvm.Run();
+	llvm.Run(variables);
 }
