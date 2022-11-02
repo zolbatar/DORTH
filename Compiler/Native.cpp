@@ -1,11 +1,10 @@
 #include <iostream>
 #include "Compiler.h"
-#include "../LLVM/CompilerLLVM.h"
-#include "../Runtime/Runtime.h"
 
 std::string compiling_word_name;
 Token* current_word = nullptr;
 std::map<std::string, std::list<Token>> words;
+std::set<std::string> words_funcs;
 
 extern "C" void __DOT(int64_t i)
 {
@@ -144,33 +143,43 @@ static bool SEMICOLON(std::list<Token>& tokens, std::list<Token>::iterator& t, C
 	//tokens.insert(t, Token{ TokenType::ENDWORD });
 	state = CompilerState::NORMAL;
 
-	// Find where this word starts
 	auto name = current_word->word;
-	auto iter = tokens.end();
-	for (auto i = tokens.begin(); i != tokens.end(); ++i)
+	if (current_word->needs_compile_support)
 	{
-		if (&*i == current_word)
+		// Find where this word starts
+		auto iter = tokens.end();
+		for (auto i = tokens.begin(); i != tokens.end(); ++i)
 		{
-			iter = i;
-			break;
+			if (&*i == current_word)
+			{
+				iter = i;
+				break;
+			}
 		}
-	}
 
-	// And ends
-	auto end_iter = iter;
-	end_iter++;
-	while (end_iter != t)
-	{
+		// And ends
+		auto end_iter = iter;
 		end_iter++;
+		while (end_iter != t)
+		{
+			end_iter++;
+		}
+		end_iter--;
+
+		// Create new word list
+		std::list<Token> word;
+		word.splice(word.begin(), tokens, iter, end_iter);
+
+		// And move to "words" map
+		words.insert(std::make_pair(name, std::move(word)));
 	}
-	end_iter--;
+	else
+	{
+		tokens.insert(t, Token{ TokenType::ENDWORD });
 
-	// Create new word list
-	std::list<Token> word;
-	word.splice(word.begin(), tokens, iter, end_iter);
-
-	// And move to "words" map
-	words.insert(std::make_pair(name, std::move(word)));
+		// Create to call
+		words_funcs.insert(name);
+	}
 
 	return true;
 }

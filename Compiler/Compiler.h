@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <map>
 #include <list>
+#include <set>
 #include <string>
 #include <capstone/capstone.h>
 #include "Tokens.h"

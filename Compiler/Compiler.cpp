@@ -3,6 +3,7 @@
 #include "../Library/StringLib.h"
 
 extern std::map<std::string, std::list<Token>> words;
+extern std::set<std::string> words_funcs;
 
 Compiler::Compiler()
 {
@@ -80,7 +81,21 @@ void Compiler::CompileToken(Token& t)
 				}
 				else
 				{
-					std::cout << "Word '" << t.word << "' not found" << std::endl;
+					auto iter = words.find(t.word);
+					if (iter != words.end())
+					{
+						// Found the word, now compile
+					}
+					else if (words_funcs.find(t.word) != words_funcs.end())
+					{
+						// Simple call
+						auto func = llvm.Module->getOrInsertFunction(t.word, llvm.TypeNone, llvm.TypeNone);
+						llvm.IR()->CreateCall(func, {});
+					}
+					else
+					{
+						std::cout << "Word '" << t.word << "' not found" << std::endl;
+					}
 				}
 			}
 			break;
